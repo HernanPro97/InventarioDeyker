@@ -32,6 +32,35 @@ try {
             $obtener_todos = isset($_GET['todos']) && $_GET['todos'] === '1';
             // ***********************************************************
 
+            // Validar fechas de filtro
+            $filtro_fecha_inicio_raw = isset($_GET['filtro_fecha_inicio']) ? $_GET['filtro_fecha_inicio'] : null;
+            $filtro_fecha_fin_raw = isset($_GET['filtro_fecha_fin']) ? $_GET['filtro_fecha_fin'] : null;
+            $filtro_fecha_inicio_val = null;
+            $filtro_fecha_fin_val = null;
+            $has_date_filter = false;
+
+            if ($filtro_fecha_inicio_raw && $filtro_fecha_fin_raw) {
+                $date_format = 'Y-m-d';
+                $d_start = DateTime::createFromFormat($date_format, $filtro_fecha_inicio_raw);
+                $d_end = DateTime::createFromFormat($date_format, $filtro_fecha_fin_raw);
+
+                if ($d_start && $d_start->format($date_format) === $filtro_fecha_inicio_raw && $d_end && $d_end->format($date_format) === $filtro_fecha_fin_raw) {
+                    $filtro_fecha_inicio_val = $filtro_fecha_inicio_raw;
+                    $filtro_fecha_fin_val = $filtro_fecha_fin_raw;
+                    $has_date_filter = true;
+                }
+            }
+
+            // SQL snippets para totales por período
+            $entradas_periodo_sql_snippet = "0.0";
+            $salidas_periodo_sql_snippet = "0.0";
+
+            if ($has_date_filter) {
+                $entradas_periodo_sql_snippet = "(SELECT COALESCE(SUM(m_ep.cantidad), 0) FROM movimientos m_ep WHERE m_ep.producto_id = p.id AND m_ep.tipo = 'entrada' AND m_ep.fecha >= :filtro_fecha_inicio_val AND m_ep.fecha <= :filtro_fecha_fin_val)";
+                $salidas_periodo_sql_snippet = "(SELECT COALESCE(SUM(m_sp.cantidad), 0) FROM movimientos m_sp WHERE m_sp.producto_id = p.id AND m_sp.tipo = 'salida' AND m_sp.fecha >= :filtro_fecha_inicio_val AND m_sp.fecha <= :filtro_fecha_fin_val)";
+            }
+
+
             if ($obtener_todos) {
                  $sqlData = "
                     SELECT
@@ -43,13 +72,20 @@ try {
                             WHERE m_lp.producto_id = p.id AND m_lp.tipo = 'entrada' AND m_lp.precio_unitario IS NOT NULL
                             ORDER BY m_lp.fecha DESC, m_lp.id DESC
                             LIMIT 1
-                        ) AS ultimo_precio_compra
+                        ) AS ultimo_precio_compra,
+                        {$entradas_periodo_sql_snippet} AS total_entradas_periodo,
+                        {$salidas_periodo_sql_snippet} AS total_salidas_periodo
                     FROM productos p
                     LEFT JOIN movimientos m ON p.id = m.producto_id
                     GROUP BY p.id, p.codigo, p.departamento, p.descripcion, p.medida
                     ORDER BY p.codigo ASC
                 ";
-                $stmtData = $pdo->query($sqlData);
+                $stmtData = $pdo->prepare($sqlData);
+                if ($has_date_filter) {
+                    $stmtData->bindParam(':filtro_fecha_inicio_val', $filtro_fecha_inicio_val);
+                    $stmtData->bindParam(':filtro_fecha_fin_val', $filtro_fecha_fin_val);
+                }
+                $stmtData->execute();
                 $productos = $stmtData->fetchAll(PDO::FETCH_ASSOC);
                 
                 foreach ($productos as &$p) {
@@ -57,6 +93,8 @@ try {
                     $p['codigo'] = (int)$p['codigo'];
                     $p['stock_actual'] = (float)$p['stock_actual'];
                     $p['ultimo_precio_compra'] = ($p['ultimo_precio_compra'] !== null) ? (float)$p['ultimo_precio_compra'] : null;
+                    $p['total_entradas_periodo'] = isset($p['total_entradas_periodo']) ? (float)$p['total_entradas_periodo'] : 0.0;
+                    $p['total_salidas_periodo'] = isset($p['total_salidas_periodo']) ? (float)$p['total_salidas_periodo'] : 0.0;
                 }
                 unset($p);
                 $response = ['success' => true, 'message' => '', 'data' => $productos]; // Sin paginación
@@ -134,7 +172,9 @@ try {
                             WHERE m_lp.producto_id = p.id AND m_lp.tipo = 'entrada' AND m_lp.precio_unitario IS NOT NULL
                             ORDER BY m_lp.fecha DESC, m_lp.id DESC
                             LIMIT 1
-                        ) AS ultimo_precio_compra
+                        ) AS ultimo_precio_compra,
+                        {$entradas_periodo_sql_snippet} AS total_entradas_periodo,
+                        {$salidas_periodo_sql_snippet} AS total_salidas_periodo
                     FROM productos p
                     LEFT JOIN movimientos m ON p.id = m.producto_id
                     $whereSql
@@ -151,6 +191,10 @@ try {
                 if (!empty($params_for_where_clause)) {
                     foreach ($params_for_where_clause as $key => $value) { $stmtData->bindValue($key, $value); }
                 }
+                if ($has_date_filter) {
+                    $stmtData->bindParam(':filtro_fecha_inicio_val', $filtro_fecha_inicio_val);
+                    $stmtData->bindParam(':filtro_fecha_fin_val', $filtro_fecha_fin_val);
+                }
                 $stmtData->bindValue(':limit_val', (int)$limit, PDO::PARAM_INT);
                 $stmtData->bindValue(':offset_val', (int)$offset, PDO::PARAM_INT);
                 // $debug_info_capture['params_data_productos_bound'] = array_merge($params_for_where_clause, [':limit_val' => (int)$limit, ':offset_val' => (int)$offset]); // Opcional
@@ -162,6 +206,8 @@ try {
                     $p['id'] = (int)$p['id']; $p['codigo'] = (int)$p['codigo'];
                     $p['stock_actual'] = (float)$p['stock_actual'];
                     $p['ultimo_precio_compra'] = ($p['ultimo_precio_compra'] !== null) ? (float)$p['ultimo_precio_compra'] : null;
+                    $p['total_entradas_periodo'] = isset($p['total_entradas_periodo']) ? (float)$p['total_entradas_periodo'] : 0.0;
+                    $p['total_salidas_periodo'] = isset($p['total_salidas_periodo']) ? (float)$p['total_salidas_periodo'] : 0.0;
                 }
                 unset($p);
 
