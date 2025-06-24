@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario v5.7 - Filtro Cliente Datalist y Detalle Pagos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        :root {
+            --bs-primary: #20c997; --bs-primary-rgb: 32, 201, 151; --bs-secondary: #6c757d; --bs-secondary-rgb: 108, 117, 125; --bs-success: #198754; --bs-success-rgb: 25, 135, 84; --bs-info: #0dcaf0; --bs-info-rgb: 13, 202, 240; --bs-warning: #ffc107; --bs-warning-rgb: 255, 193, 7; --bs-danger: #dc3545; --bs-danger-rgb: 220, 53, 69; --bs-light: #f8f9fa; --bs-light-rgb: 248, 249, 250; --bs-dark: #212529; --bs-dark-rgb: 33, 37, 41; --bs-body-font-family: 'Roboto', sans-serif; --bs-body-color: var(--bs-dark); --bs-body-bg: #f0f9f8; --bs-border-color: #dee2e6; --bs-border-radius: 0.375rem; --bs-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08); --bs-form-control-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25); --gradient-start: #e6fcf5; --gradient-end: #f0f9f8; --font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; --white-color: #ffffff;
+        }
+        [data-bs-theme="dark"] {
+            --bs-primary: #20c997; --bs-primary-rgb: 32, 201, 151; --bs-secondary: #adb5bd; --bs-secondary-rgb: 173, 181, 189; --bs-success: #198754; --bs-info: #0dcaf0; --bs-warning: #ffc107; --bs-danger: #dc3545; --bs-light: #343a40; --bs-light-rgb: 52, 58, 64; --bs-dark: #f8f9fa; --bs-dark-rgb: 248, 249, 250; --bs-body-color: #dee2e6; --bs-body-bg: #1a252f; --bs-border-color: #495057; --bs-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25); --bs-form-control-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.4); --bs-tertiary-bg: #2c3a47; --bs-tertiary-bg-rgb: 44, 58, 71; --gradient-start: #11181f; --gradient-end: #1a252f;
+            .table { --bs-table-bg: var(--bs-tertiary-bg); --bs-table-border-color: var(--bs-border-color); --bs-table-color: var(--bs-body-color); --bs-table-striped-bg: rgba(255,255,255,0.03); --bs-table-striped-color: var(--bs-body-color); --bs-table-hover-bg: rgba(255,255,255,0.06); --bs-table-hover-color: var(--bs-body-color); --bs-table-active-bg: rgba(255,255,255,0.08); --bs-table-active-color: var(--bs-body-color); }
+            .form-control, .form-select, input[type="text"], input[type="number"], input[type="date"], input[type="email"], textarea { background-color: #2b3035; color: var(--bs-body-color); border-color: var(--bs-border-color); }
+            .form-control::placeholder, input::placeholder, textarea::placeholder { color: #868e96; opacity: 1; }
+            .form-control:focus, .form-select:focus, input:focus, select:focus, textarea:focus { border-color: var(--bs-primary); box-shadow: var(--bs-form-control-focus-box-shadow); }
+            .form-control:disabled, .form-control:read-only, input:read-only, textarea:read-only { background-color: #3a4045; opacity: 0.7; }
+            .form-select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23adb5bd' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); }
+            datalist option { background-color: #343a40; color: #f8f9fa; }
+            .btn-light { --bs-btn-color: #f8f9fa; --bs-btn-bg: var(--bs-light); --bs-btn-border-color: var(--bs-light); --bs-btn-hover-color: #f8f9fa; --bs-btn-hover-bg: #495057; --bs-btn-hover-border-color: #495057; --bs-btn-active-color: #f8f9fa; --bs-btn-active-bg: #5a6268; --bs-btn-active-border-color: #5a6268; }
+            .container { background-color: var(--bs-tertiary-bg); box-shadow: var(--bs-box-shadow); }
+            .nav-tabs { border-bottom-color: var(--bs-border-color); }
+            .nav-tabs .nav-link { color: var(--bs-secondary); border-color: transparent transparent var(--bs-border-color); }
+            .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus { border-color: transparent transparent var(--bs-primary); isolation: isolate; color: #e9ecef; }
+            .nav-tabs .nav-link.active { color: var(--bs-primary); background-color: var(--bs-tertiary-bg); border-color: var(--bs-border-color) var(--bs-border-color) var(--bs-tertiary-bg); }
+            #theme-toggle-btn { color: var(--bs-primary); border-color: var(--bs-primary); } #theme-toggle-btn:hover { background-color: rgba(var(--bs-primary-rgb), 0.15); }
+            .alert-light { color: var(--bs-dark); background-color: var(--bs-light); border-color: var(--bs-light); }
+            .card { background-color: #212529; border-color: var(--bs-border-color); }
+            .card .display-5, .card .h3 { color: var(--bs-light); } .card .text-muted { color: var(--bs-secondary) !important; }
+            .pagination .page-link { background-color: #2b3035; border-color: var(--bs-border-color); color: var(--bs-body-color); }
+            .pagination .page-item.disabled .page-link { background-color: #3a4045; border-color: var(--bs-border-color); color: #6c757d; }
+            .pagination .page-item.active .page-link { background-color: var(--bs-primary); border-color: var(--bs-primary); color: var(--white-color); }
+            .pagination .page-link:hover { background-color: #3a4045; }
+            .factura-anulada td { text-decoration: line-through; opacity: 0.6; }
+            .factura-anulada .badge { background-color: var(--bs-secondary) !important; color: var(--bs-light) !important; }
+            [data-bs-theme="dark"] .factura-anulada .badge { background-color: #495057 !important; color: #adb5bd !important; }
+        }
+        body { font-family: var(--bs-body-font-family); line-height: 1.6; background-image: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); background-attachment: fixed; min-height: 100vh; padding-top: 1rem; padding-bottom: 1rem; color: var(--bs-body-color); background-color: var(--bs-body-bg); }
+        .container { max-width: 1350px; margin: 1rem auto; background-color: var(--bs-body-bg); box-shadow: var(--bs-box-shadow); border-radius: var(--bs-border-radius); overflow: hidden; }
+        [data-bs-theme="dark"] .container { background-color: var(--bs-tertiary-bg); }
+        header { background-color: var(--bs-primary); color: var(--white-color); padding: 1.5rem 2rem; text-align: center; position: relative; }
+        header h1 { margin: 0; font-size: 1.75rem; font-weight: 500; }
+        .tabs-container { background-color: var(--bs-light); border-bottom: 1px solid var(--bs-border-color); }
+        [data-bs-theme="dark"] .tabs-container { background-color: #212529; }
+        .nav-tabs { border-bottom: none; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--bs-secondary) transparent; }
+        .nav-tabs::-webkit-scrollbar { height: 5px; } .nav-tabs::-webkit-scrollbar-thumb { background-color: var(--bs-secondary); border-radius: 3px; }
+        .nav-tabs .nav-item { flex-shrink: 0; }
+        .nav-tabs .nav-link { padding: 0.8rem 1rem; cursor: pointer; border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0; margin-bottom: -1px; font-size: 0.9rem; font-weight: 500; text-align: center; white-space: nowrap; border: 1px solid transparent; }
+        .tab-content > .seccion { padding: 2rem; display: none; }
+        .tab-content > .seccion.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .seccion h2 { color: var(--bs-primary); border-bottom: 1px solid var(--bs-border-color); padding-bottom: 0.75rem; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 500; }
+        label.form-label { font-weight: 500; color: #495057; font-size: 0.95rem; }
+        [data-bs-theme="dark"] label.form-label { color: #adb5bd; }
+        input[type="number"] { text-align: right; }
+        #precio-container, #proveedor-container, #cliente-container { display: none; }
+        .btn { transition: all 0.2s ease-in-out; } .btn-sm i, .btn i { margin-right: 0.3rem; }
+        .btn-danger { --bs-btn-hover-bg: #a71d2a; --bs-btn-hover-border-color: #a71d2a; }
+        .table { margin-top: 1.5rem; font-size: 0.9rem; vertical-align: middle; } .table th { font-weight: 500; white-space: nowrap; } .table th.num, .table td.num { text-align: right; } .table td { word-break: break-word; }
+        #tabla-factura-items input[type="number"], #tabla-factura-items input[type="text"] { width: auto; min-width: 80px; padding: 0.3rem 0.5rem; font-size: 0.9rem; margin-bottom: 0; display: inline-block; } #tabla-factura-items .subtotal { font-weight: bold; }
+        #factura-total-display { font-size: 1.2rem; font-weight: bold; text-align: right; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--bs-dark); } [data-bs-theme="dark"] #factura-total-display { border-top-color: var(--bs-light); }
+        .mensaje { display: none; } #mensaje-global { position: fixed; bottom: 20px; right: 20px; z-index: 1056; max-width: 350px; box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1); } [data-bs-theme="dark"] #mensaje-global { box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.3); }
+        .stock-negativo { color: var(--bs-danger); font-weight: bold; } .stock-cero { color: var(--bs-danger); }
+        #tabla-historial-facturas .btn-sm { margin-right: 5px; } .link-ver-factura { text-decoration: none; font-weight: 500; }
+        #theme-toggle-btn { position: absolute; top: 15px; right: 20px; border-radius: 50%; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; padding: 0; border-width: 1px; }
+        .text-danger { color: var(--bs-danger) !important; }
+        .card-resumen { border: none; border-left: 5px solid var(--bs-primary); box-shadow: var(--bs-box-shadow); transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; height: 100%; }
+        .card-resumen:hover { transform: translateY(-3px); box-shadow: 0 0.8rem 1.2rem rgba(0,0,0,0.12); } [data-bs-theme="dark"] .card-resumen:hover { box-shadow: 0 0.8rem 1.2rem rgba(0,0,0,0.35); }
+        .card-resumen .card-body { display: flex; align-items: center; padding: 1.5rem; } .card-resumen .icono-card { font-size: 2.8rem; margin-right: 1.5rem; opacity: 0.7; min-width: 50px; text-align: center; }
+        .card-resumen .texto-card .stat-valor { font-size: 2rem; font-weight: 700; display: block; line-height: 1.1; margin-bottom: 0.2rem; } .card-resumen .texto-card .stat-label { font-size: 0.95rem; margin-bottom: 0; }
+        .card-resumen.border-primary .icono-card { color: var(--bs-primary); } .card-resumen.border-warning { border-left-color: var(--bs-warning); } .card-resumen.border-warning .icono-card { color: var(--bs-warning); }
+        .card-resumen.border-success { border-left-color: var(--bs-success); } .card-resumen.border-success .icono-card { color: var(--bs-success); } .card-resumen.border-info { border-left-color: var(--bs-info); } .card-resumen.border-info .icono-card { color: var(--bs-info); }
+        .card-resumen .placeholder-glow .placeholder { height: 2rem; margin-bottom: 0.2rem; width: 60%; } .card-resumen .placeholder-glow .placeholder.w-40 { width: 40%; height: 1rem; }
+        .pagination-controls-container { display: none; }
+        .deuda-pendiente { color: var(--bs-warning); font-weight: bold; } 
+        .sin-deuda { color: var(--bs-success); } 
+        [data-bs-theme="dark"] .deuda-pendiente { color: #ffda6a; }
+        [data-bs-theme="dark"] .sin-deuda { color: #48c78e; }
+        .factura-anulada td { text-decoration: line-through; opacity: 0.6; }
+        .factura-anulada .badge { background-color: var(--bs-secondary) !important; color: var(--bs-light) !important; }
+        [data-bs-theme="dark"] .factura-anulada .badge { background-color: #495057 !important; color: #adb5bd !important; }
+
+
+        @media print { 
+            body * { visibility: hidden; } 
+            #printable-factura, #printable-factura * { visibility: visible; } 
+            #printable-factura { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 20px; font-size: 11pt; color: #000; background-color: white !important; font-family: Arial, sans-serif; line-height: 1.4; } 
+            #printable-factura h2, #printable-factura h3 { color: #000; border: none; margin-bottom: 10px; font-size: 14pt; font-weight: bold; } 
+            #printable-factura p { font-size: 11pt; margin-bottom: 5px; } 
+            #printable-factura table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10pt; } 
+            #printable-factura th, #printable-factura td { border: 1px solid #999; padding: 6px; text-align: left; } 
+            #printable-factura th { background-color: #eee; font-weight: bold; } 
+            #printable-factura .num { text-align: right; } 
+            #printable-factura #print-total { text-align: right; font-weight: bold; font-size: 12pt; margin-top: 15px; padding-top: 10px; border-top: 2px solid #000; } 
+            #printable-factura .no-print, #printable-factura .print-watermark-anulada { display: none; } 
+            body > *:not(#printable-factura) { display: none; } html, body { background: none !important; } 
+            #printable-factura.anulada-print-version { position: relative; }
+            #printable-factura.anulada-print-version::after {
+                content: "ANULADA"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
+                font-size: 100pt; color: rgba(255, 0, 0, 0.2); font-weight: bold; z-index: 1000; pointer-events: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Formulario de Login -->
+    <div id="login-container" class="container" style="max-width: 400px; margin-top: 50px;">
+        <div class="card"><div class="card-header"><h4>Inicio de Sesión</h4></div>
+            <div class="card-body"><form id="login-form"><div class="mb-3"><label for="username" class="form-label">Usuario:</label><input type="text" class="form-control" id="username" required autocomplete="username"></div><div class="mb-3"><label for="password" class="form-label">Contraseña:</label><input type="password" class="form-control" id="password" required autocomplete="current-password"></div><button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button><div id="login-message" class="mt-3" style="display: none;"></div></form></div>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal -->
+    <div id="app-container" style="display: none;">
+        <div class="container">
+            <header><h1>Gestión de Inventario</h1><button id="theme-toggle-btn" class="btn btn-outline-light btn-sm" title="Cambiar Tema"><i id="theme-icon" class="fas fa-moon"></i></button><button id="logout-btn" class="btn btn-sm btn-danger" style="position: absolute; top: 15px; left: 20px;" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i> Salir</button></header>
+            <div class="tabs-container">
+                 <ul class="nav nav-tabs" id="myTab" role="tablist">
+                     <li class="nav-item" role="presentation"><button class="nav-link active" id="tab-resumen" data-bs-toggle="tab" data-bs-target="#seccion-resumen" type="button" role="tab" aria-controls="seccion-resumen" aria-selected="true"><i class="fas fa-tachometer-alt"></i> Resumen</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-carga" data-bs-toggle="tab" data-bs-target="#seccion-carga" type="button" role="tab" aria-controls="seccion-carga" aria-selected="false"><i class="fas fa-box-open"></i> Producto</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-clientes" data-bs-toggle="tab" data-bs-target="#seccion-clientes" type="button" role="tab" aria-controls="seccion-clientes" aria-selected="false"><i class="fas fa-users"></i> Clientes</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-movimiento" data-bs-toggle="tab" data-bs-target="#seccion-movimiento" type="button" role="tab" aria-controls="seccion-movimiento" aria-selected="false"><i class="fas fa-exchange-alt"></i> Movimiento</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-detalle-inventario" data-bs-toggle="tab" data-bs-target="#seccion-detalle-inventario" type="button" role="tab" aria-controls="seccion-detalle-inventario" aria-selected="false"><i class="fas fa-boxes"></i> Inventario</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-historial" data-bs-toggle="tab" data-bs-target="#seccion-historial" type="button" role="tab" aria-controls="seccion-historial" aria-selected="false"><i class="fas fa-history"></i> Hist. Mov.</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-factura" data-bs-toggle="tab" data-bs-target="#seccion-factura" type="button" role="tab" aria-controls="seccion-factura" aria-selected="false"><i class="fas fa-file-invoice-dollar"></i> Factura</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-cxc" data-bs-toggle="tab" data-bs-target="#seccion-cxc" type="button" role="tab" aria-controls="seccion-cxc" aria-selected="false"><i class="fas fa-hand-holding-usd"></i> CxC</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-historial-facturas" data-bs-toggle="tab" data-bs-target="#seccion-historial-facturas" type="button" role="tab" aria-controls="seccion-historial-facturas" aria-selected="false"><i class="fas fa-folder-open"></i> Hist. Fact.</button></li>
+                     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-datos" data-bs-toggle="tab" data-bs-target="#seccion-datos" type="button" role="tab" aria-controls="seccion-datos" aria-selected="false"><i class="fas fa-database"></i> Datos</button></li>
+                 </ul>
+            </div>
+
+            <div class="tab-content" id="myTabContent">
+                <!-- SECCIÓN RESUMEN -->
+                <div class="tab-pane fade show active seccion" id="seccion-resumen" role="tabpanel" aria-labelledby="tab-resumen"><h2><i class="fas fa-chart-line me-2"></i>Resumen General</h2><div class="row g-4" id="resumen-cards-container"><div class="col-md-6 col-lg-3"><div class="card card-resumen border-primary h-100"><div class="card-body"><div class="icono-card"><i class="fas fa-boxes-stacked"></i></div><div class="texto-card ms-3"><span class="stat-valor" id="stat-total-productos">--</span><p class="stat-label text-muted mb-0">Productos Únicos</p></div></div></div></div><div class="col-md-6 col-lg-3"><div class="card card-resumen border-warning h-100"><div class="card-body"><div class="icono-card"><i class="fas fa-exclamation-triangle"></i></div><div class="texto-card ms-3"><span class="stat-valor" id="stat-bajo-stock">--</span><p class="stat-label text-muted mb-0">Productos Bajo Stock (<=0)</p></div></div></div></div><div class="col-md-6 col-lg-3"><div class="card card-resumen border-success h-100"><div class="card-body"><div class="icono-card"><i class="fas fa-dollar-sign"></i></div><div class="texto-card ms-3"><span class="stat-valor" id="stat-valor-total">--</span><p class="stat-label text-muted mb-0">Valor Total Estimado</p></div></div></div></div><div class="col-md-6 col-lg-3"><div class="card card-resumen border-info h-100"><div class="card-body"><div class="icono-card"><i class="fas fa-file-alt"></i></div><div class="texto-card ms-3"><span class="stat-valor" id="stat-total-facturas">--</span><p class="stat-label text-muted mb-0">Facturas Registradas</p></div></div></div></div></div><div id="resumen-loading-placeholder" class="row g-4" style="display: none;"><div class="col-md-6 col-lg-3" aria-hidden="true"><div class="card card-resumen border-primary h-100 placeholder-glow"><div class="card-body align-items-start"><div class="texto-card ms-0"><span class="placeholder col-6"></span><p class="placeholder w-40"></p></div></div></div></div><div class="col-md-6 col-lg-3" aria-hidden="true"><div class="card card-resumen border-warning h-100 placeholder-glow"><div class="card-body align-items-start"><div class="texto-card ms-0"><span class="placeholder col-4"></span><p class="placeholder w-40"></p></div></div></div></div><div class="col-md-6 col-lg-3" aria-hidden="true"><div class="card card-resumen border-success h-100 placeholder-glow"><div class="card-body align-items-start"><div class="texto-card ms-0"><span class="placeholder col-7"></span><p class="placeholder w-40"></p></div></div></div></div><div class="col-md-6 col-lg-3" aria-hidden="true"><div class="card card-resumen border-info h-100 placeholder-glow"><div class="card-body align-items-start"><div class="texto-card ms-0"><span class="placeholder col-5"></span><p class="placeholder w-40"></p></div></div></div></div></div><div id="resumen-error-placeholder" class="alert alert-danger mt-4" style="display: none;">Error al cargar resumen.</div></div>
+                <!-- SECCIÓN CARGA PRODUCTO -->
+                <div class="tab-pane fade seccion" id="seccion-carga" role="tabpanel" aria-labelledby="tab-carga"><h2><i class="fas fa-plus-circle me-2"></i>Cargar Nuevo Producto</h2><form id="form-nuevo-producto"><div class="mb-3"><label for="producto-departamento" class="form-label">Departamento:</label><input type="text" class="form-control" id="producto-departamento" required></div><div class="mb-3"><label for="producto-descripcion" class="form-label">Descripción:</label><input type="text" class="form-control" id="producto-descripcion" required></div><div class="mb-3"><label for="producto-medida" class="form-label">U. Medida:</label><select class="form-select" id="producto-medida" required><option value="">Seleccione...</option><option value="Kg">Kg</option><option value="Unid">Unid</option><option value="L">L</option><option value="m">m</option><option value="Paq">Paq</option></select></div><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Producto</button></form><div id="mensaje-producto" class="mt-3"></div></div>
+                <!-- SECCIÓN CLIENTES -->
+                <div class="tab-pane fade seccion" id="seccion-clientes" role="tabpanel" aria-labelledby="tab-clientes"><h2><i class="fas fa-user-tie me-2"></i>Gestión de Clientes</h2><div class="card mb-4"><div class="card-header"><h5 id="cliente-form-title">Agregar Nuevo Cliente</h5></div><div class="card-body"><form id="form-cliente"><input type="hidden" id="cliente-id-edit" value=""><div class="row"><div class="col-md-6 mb-3"><label for="cliente-nombre" class="form-label">Nombre o Razón Social: <span class="text-danger">*</span></label><input type="text" class="form-control" id="cliente-nombre" required></div><div class="col-md-6 mb-3"><label for="cliente-codigo-alfanumerico" class="form-label">Código Alfanumérico (Opcional):</label><input type="text" class="form-control" id="cliente-codigo-alfanumerico" placeholder="Ej: CLI-ABC"></div></div><div class="row"><div class="col-md-6 mb-3"><label for="cliente-identificacion" class="form-label">Identificación Fiscal:</label><input type="text" class="form-control" id="cliente-identificacion"></div><div class="col-md-6 mb-3"><label for="cliente-telefono" class="form-label">Teléfono:</label><input type="text" class="form-control" id="cliente-telefono"></div></div><div class="mb-3"><label for="cliente-direccion" class="form-label">Dirección:</label><textarea class="form-control" id="cliente-direccion" rows="2"></textarea></div><div class="mb-3"><label for="cliente-email" class="form-label">Email:</label><input type="email" class="form-control" id="cliente-email"></div><div class="mb-3 form-check"><input type="checkbox" class="form-check-input" id="cliente-activo" checked><label class="form-check-label" for="cliente-activo">Cliente Activo</label></div><button type="submit" class="btn btn-primary me-2"><i class="fas fa-save"></i> Guardar Cliente</button><button type="button" class="btn btn-secondary" id="btn-cancelar-cliente-edicion" style="display:none;"><i class="fas fa-times"></i> Cancelar Edición</button></form><div id="mensaje-cliente" class="mt-3"></div></div></div>
+                    <div class="table-responsive">
+                        <table id="tabla-clientes" class="table table-striped table-hover table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID Cliente</th>
+                                    <th>Nombre/Razón Social</th>
+                                    <th>Cód. Alfa.</th>
+                                    <th>Identificación</th>
+                                    <th>Teléfono</th>
+                                    <th class="num">Deuda Total ($)</th> 
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-tabla-clientes"><tr><td colspan="9" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- SECCIÓN MOVIMIENTO -->
+                <div class="tab-pane fade seccion" id="seccion-movimiento" role="tabpanel" aria-labelledby="tab-movimiento"><h2><i class="fas fa-arrows-alt-h me-2"></i>Registrar Movimiento Manual</h2><form id="form-movimiento"><div class="mb-3"><label for="movimiento-producto-input" class="form-label">Producto:</label><input type="text" class="form-control" id="movimiento-producto-input" list="productos-lista" placeholder="[Cod] Buscar producto..." required autocomplete="off"><datalist id="productos-lista"></datalist><input type="hidden" id="movimiento-producto-id"></div><div class="row"><div class="col-md-6 mb-3"><label for="movimiento-tipo" class="form-label">Tipo:</label><select class="form-select" id="movimiento-tipo" required><option value="entrada" selected>Entrada</option><option value="salida">Salida</option></select></div><div class="col-md-6 mb-3"><label for="movimiento-cantidad" class="form-label">Cantidad:</label><input type="number" class="form-control" id="movimiento-cantidad" required min="0.01" step="any"></div></div><div class="row"><div class="col-md-6 mb-3" id="precio-container"><label for="movimiento-precio" class="form-label">Precio Unit. ($):</label><input type="number" class="form-control" id="movimiento-precio" min="0" step="0.01"></div><div class="col-md-6 mb-3" id="proveedor-container"><label for="movimiento-proveedor" class="form-label">Proveedor:</label><input type="text" class="form-control" id="movimiento-proveedor" placeholder="(Opcional)"></div></div><div class="row"><div class="col-md-6 mb-3" id="cliente-container"><label for="movimiento-cliente" class="form-label">Cliente:</label><input type="text" class="form-control" id="movimiento-cliente" placeholder="(Opcional)"></div><div class="col-md-6 mb-3"><label for="movimiento-fecha" class="form-label">Fecha:</label><input type="date" class="form-control" id="movimiento-fecha" required></div></div><button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Registrar Movimiento</button></form><div id="mensaje-movimiento" class="mt-3"></div></div>
+                <!-- SECCIÓN DETALLE INVENTARIO -->
+                <div class="tab-pane fade seccion" id="seccion-detalle-inventario" role="tabpanel" aria-labelledby="tab-detalle-inventario">
+                    <h2><i class="fas fa-clipboard-list me-2"></i>Detalle del Inventario</h2>
+                    <div class="row mb-3 g-2 align-items-end">
+                        <div class="col-md-3"><label for="filtro-inventario-texto" class="form-label form-label-sm mb-1">Producto:</label><input type="text" id="filtro-inventario-texto" class="form-control form-control-sm" placeholder="Código, Depto, Desc..."></div>
+                        <div class="col-md-2"><label for="filtro-inventario-stock" class="form-label form-label-sm mb-1">Stock:</label><select id="filtro-inventario-stock" class="form-select form-select-sm"><option value="">Todos</option><option value="positivo">Con Stock (>0)</option><option value="cero">Sin Stock (0)</option><option value="negativo">Stock Negativo (<0)</option></select></div>
+                        <div class="col-md-2"><label for="filtro-inventario-es-fecha-inicio" class="form-label form-label-sm mb-1">E/S Desde:</label><input type="date" id="filtro-inventario-es-fecha-inicio" class="form-control form-control-sm"></div>
+                        <div class="col-md-2"><label for="filtro-inventario-es-fecha-fin" class="form-label form-label-sm mb-1">E/S Hasta:</label><input type="date" id="filtro-inventario-es-fecha-fin" class="form-control form-control-sm"></div>
+                        <div class="col-md-3 text-end"><button id="limpiar-filtro-inventario" class="btn btn-secondary btn-sm" title="Limpiar Filtros"><i class="fas fa-times"></i> Limpiar</button></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tabla-inventario" class="table table-striped table-hover table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Código</th><th>Departamento</th><th>Descripción</th><th>U. Medida</th>
+                                    <th class="num">Stock Actual</th> <th class="num">Últ. Precio ($)</th>
+                                    <th class="num">Entradas (Periodo)</th> <th class="num">Salidas (Periodo)</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-tabla-inventario"><tr><td colspan="9" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div id="inventario-pagination-controls" class="pagination-controls-container d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <label for="inventario-limit-select" class="form-label form-label-sm me-1">Mostrar:</label>
+                            <select id="inventario-limit-select" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                                <option value="10">10</option><option value="25" selected>25</option><option value="50">50</option><option value="100">100</option>
+                            </select>
+                            <span id="inventario-pagination-info" class="ms-2 text-muted small"></span>
+                        </div>
+                        <nav aria-label="Paginación inventario"><ul class="pagination pagination-sm mb-0">
+                                <li class="page-item"><button class="page-link" id="inventario-btn-primera" title="Primera Página"><i class="fas fa-angle-double-left"></i></button></li>
+                                <li class="page-item"><button class="page-link" id="inventario-btn-anterior" title="Página Anterior"><i class="fas fa-angle-left"></i></button></li>
+                                <li class="page-item disabled"><span class="page-link" id="inventario-page-display">Pág. 1 de 1</span></li>
+                                <li class="page-item"><button class="page-link" id="inventario-btn-siguiente" title="Página Siguiente"><i class="fas fa-angle-right"></i></button></li>
+                                <li class="page-item"><button class="page-link" id="inventario-btn-ultima" title="Última Página"><i class="fas fa-angle-double-right"></i></button></li>
+                        </ul></nav>
+                    </div>
+                </div>
+                <!-- SECCIÓN HISTORIAL MOVIMIENTOS -->
+                <div class="tab-pane fade seccion" id="seccion-historial" role="tabpanel" aria-labelledby="tab-historial">
+                    <h2><i class="fas fa-list-ul me-2"></i>Historial de Movimientos</h2>
+                    <div class="row mb-3 g-2 align-items-end">
+                        <div class="col-md-3"><label for="filtro-historial-texto" class="form-label form-label-sm mb-1">Producto:</label><input type="text" id="filtro-historial-texto" class="form-control form-control-sm" placeholder="Código o Descripción..."></div>
+                        <div class="col-md-2"><label for="filtro-historial-tipo" class="form-label form-label-sm mb-1">Tipo:</label><select id="filtro-historial-tipo" class="form-select form-select-sm"><option value="">Todos</option><option value="entrada">Entrada</option><option value="salida">Salida</option></select></div>
+                        <div class="col-md-3"><label for="filtro-historial-fecha-inicio" class="form-label form-label-sm mb-1">Desde:</label><input type="date" id="filtro-historial-fecha-inicio" class="form-control form-control-sm"></div>
+                        <div class="col-md-3"><label for="filtro-historial-fecha-fin" class="form-label form-label-sm mb-1">Hasta:</label><input type="date" id="filtro-historial-fecha-fin" class="form-control form-control-sm"></div>
+                        <div class="col-md-1 text-end"><button id="limpiar-filtro-historial" class="btn btn-secondary btn-sm" title="Limpiar Filtros"><i class="fas fa-times"></i></button></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tabla-historial" class="table table-striped table-hover table-sm">
+                            <thead class="table-light"><tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th class="num">Cantidad</th><th class="num">Precio U. ($)</th><th>Prov/Cliente</th><th>Ref. Fact.</th><th>Acción</th></tr></thead>
+                            <tbody id="cuerpo-tabla-historial"><tr><td colspan="8" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div id="historial-movimientos-pagination-controls" class="pagination-controls-container d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <label for="historial-limit-select" class="form-label form-label-sm me-1">Mostrar:</label>
+                            <select id="historial-limit-select" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                                <option value="10">10</option><option value="25" selected>25</option><option value="50">50</option><option value="100">100</option>
+                            </select>
+                            <span id="historial-pagination-info" class="ms-2 text-muted small"></span>
+                        </div>
+                        <nav aria-label="Paginación historial movimientos"><ul class="pagination pagination-sm mb-0">
+                                <li class="page-item"><button class="page-link" id="historial-btn-primera" title="Primera Página"><i class="fas fa-angle-double-left"></i></button></li>
+                                <li class="page-item"><button class="page-link" id="historial-btn-anterior" title="Página Anterior"><i class="fas fa-angle-left"></i></button></li>
+                                <li class="page-item disabled"><span class="page-link" id="historial-page-display">Pág. 1 de 1</span></li>
+                                <li class="page-item"><button class="page-link" id="historial-btn-siguiente" title="Página Siguiente"><i class="fas fa-angle-right"></i></button></li>
+                                <li class="page-item"><button class="page-link" id="historial-btn-ultima" title="Última Página"><i class="fas fa-angle-double-right"></i></button></li>
+                        </ul></nav>
+                    </div>
+                </div>
+                <!-- SECCIÓN FACTURA (CON CAMPOS CXC) -->
+                <div class="tab-pane fade seccion" id="seccion-factura" role="tabpanel" aria-labelledby="tab-factura"><h2><i class="fas fa-receipt me-2"></i>Crear Nueva Factura</h2>
+                    <form id="form-factura" class="mb-3">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="factura-fecha" class="form-label">Fecha: <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="factura-fecha" required>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="factura-cliente-input" class="form-label">Cliente: <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="factura-cliente-input" list="factura-clientes-lista" placeholder="[ID] o Nombre del cliente..." required autocomplete="off">
+                                <datalist id="factura-clientes-lista"></datalist>
+                                <input type="hidden" id="factura-cliente-id-hidden">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="factura-condicion-pago" class="form-label">Condición de Pago: <span class="text-danger">*</span></label>
+                                <select class="form-select" id="factura-condicion-pago" required>
+                                    <option value="contado" selected>Contado</option>
+                                    <option value="credito">Crédito</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" id="factura-fecha-vencimiento-container" style="display:none;">
+                                <label for="factura-fecha-vencimiento" class="form-label">Fecha de Vencimiento: <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="factura-fecha-vencimiento">
+                            </div>
+                        </div>
+                    </form>
+                    <h3>Ítems de la Factura</h3>
+                    <div class="table-responsive mb-3"><table id="tabla-factura-items" class="table table-sm align-middle"><thead class="table-light"><tr><th style="width: 40%;">Producto</th><th class="num" style="width: 15%;">Cant.</th><th class="num" style="width: 15%;">Precio Venta ($)</th><th class="num" style="width: 20%;">Subtotal ($)</th><th style="width: 10%; text-align:center;">Quitar</th></tr></thead><tbody id="cuerpo-tabla-factura-items"></tbody></table></div>
+                    <button type="button" id="btn-add-factura-item" class="btn btn-primary btn-sm mb-3"><i class="fas fa-plus"></i> Añadir Ítem</button>
+                    <div id="factura-total-display">Total Factura: $ 0.00</div>
+                    <div class="text-end mt-4"><button type="button" id="btn-guardar-factura" class="btn btn-success btn-lg"><i class="fas fa-save"></i> Guardar Factura</button></div>
+                    <div id="mensaje-factura" class="mt-3"></div>
+                </div>
+                <!-- SECCIÓN CUENTAS POR COBRAR (CXC) -->
+                <div class="tab-pane fade seccion" id="seccion-cxc" role="tabpanel" aria-labelledby="tab-cxc"><h2><i class="fas fa-hand-holding-usd me-2"></i>Cuentas por Cobrar</h2><div class="row mb-3 g-2 align-items-end"><div class="col-md-3"><label for="filtro-cxc-cliente" class="form-label form-label-sm mb-1">Cliente:</label><select id="filtro-cxc-cliente" class="form-select form-select-sm"><option value="">Todos</option></select></div><div class="col-md-2"><label for="filtro-cxc-estado" class="form-label form-label-sm mb-1">Estado Fact.:</label><select id="filtro-cxc-estado" class="form-select form-select-sm"><option value="">Pendiente/Parcial</option><option value="pendiente">Pendiente</option><option value="parcialmente_pagada">Parcial</option><option value="vencida">Vencidas</option></select></div><div class="col-md-3"><label for="filtro-cxc-factura-id" class="form-label form-label-sm mb-1">ID Factura:</label><input type="number" id="filtro-cxc-factura-id" class="form-control form-control-sm" placeholder="Buscar ID Factura"></div><div class="col-md-4 text-end"><button id="btn-aplicar-filtro-cxc" class="btn btn-primary btn-sm me-1"><i class="fas fa-filter"></i> Filtrar</button><button id="limpiar-filtro-cxc" class="btn btn-secondary btn-sm"><i class="fas fa-times"></i></button></div></div><div class="table-responsive"><table id="tabla-cxc" class="table table-striped table-hover table-sm"><thead class="table-light"><tr><th>ID Fact.</th><th>Cliente</th><th>Fecha Fact.</th><th>Fecha Venc.</th><th class="num">Total ($)</th><th class="num">Saldo ($)</th><th>Estado</th><th class="num">Días Venc.</th><th>Acciones</th></tr></thead><tbody id="cuerpo-tabla-cxc"><tr><td colspan="9" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando...</td></tr></tbody></table></div></div>
+                <!-- SECCIÓN HISTORIAL FACTURAS -->
+                <div class="tab-pane fade seccion" id="seccion-historial-facturas" role="tabpanel" aria-labelledby="tab-historial-facturas">
+                    <h2><i class="fas fa-archive me-2"></i>Historial de Facturas</h2>
+                    <div class="row mb-3 g-2 align-items-end">
+                        <div class="col-md-3"><label for="filtro-facturas-texto" class="form-label form-label-sm mb-1">Cliente/ID:</label><input type="text" id="filtro-facturas-texto" class="form-control form-control-sm" placeholder="Nombre o ID..."></div>
+                        <div class="col-md-2"><label for="filtro-facturas-fecha-inicio" class="form-label form-label-sm mb-1">Desde:</label><input type="date" id="filtro-facturas-fecha-inicio" class="form-control form-control-sm"></div>
+                        <div class="col-md-2"><label for="filtro-facturas-fecha-fin" class="form-label form-label-sm mb-1">Hasta:</label><input type="date" id="filtro-facturas-fecha-fin" class="form-control form-control-sm"></div>
+                        <div class="col-md-2">
+                            <div class="form-check form-switch mt-3">
+                                <input class="form-check-input" type="checkbox" role="switch" id="filtro-facturas-ver-anuladas">
+                                <label class="form-check-label form-label-sm" for="filtro-facturas-ver-anuladas">Incluir Anuladas</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-end"><button id="limpiar-filtro-facturas" class="btn btn-secondary btn-sm" title="Limpiar Filtros"><i class="fas fa-times"></i></button></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tabla-historial-facturas" class="table table-striped table-hover table-sm"><thead class="table-light"><tr><th>ID Fact.</th><th>Fecha</th><th>Cliente</th><th class="num">Total ($)</th><th>Cond. Pago</th><th class="num">Saldo ($)</th><th>Estado Pago</th><th>Acciones</th></tr></thead>
+                            <tbody id="cuerpo-tabla-historial-facturas"><tr><td colspan="8" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando...</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div id="historial-facturas-pagination-controls" class="pagination-controls-container d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <label for="histfact-limit-select" class="form-label form-label-sm me-1">Mostrar:</label>
+                            <select id="histfact-limit-select" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                                <option value="10">10</option><option value="25" selected>25</option><option value="50">50</option><option value="100">100</option>
+                            </select>
+                            <span id="histfact-pagination-info" class="ms-2 text-muted small"></span>
+                        </div>
+                        <nav aria-label="Paginación historial facturas"><ul class="pagination pagination-sm mb-0">
+                                <li class="page-item"><button class="page-link" id="histfact-btn-primera" title="Primera Página"><i class="fas fa-angle-double-left"></i></button></li>
+                                <li class="page-item"><button class="page-link" id="histfact-btn-anterior" title="Página Anterior"><i class="fas fa-angle-left"></i></button></li>
+                                <li class="page-item disabled"><span class="page-link" id="histfact-page-display">Pág. 1 de 1</span></li>
+                                <li class="page-item"><button class="page-link" id="histfact-btn-siguiente" title="Página Siguiente"><i class="fas fa-angle-right"></i></button></li>
+                                <li class="page-item"><button class="page-link" id="histfact-btn-ultima" title="Última Página"><i class="fas fa-angle-double-right"></i></button></li>
+                        </ul></nav>
+                    </div>
+                </div>
+                <!-- SECCIÓN DATOS -->
+                <div class="tab-pane fade seccion" id="seccion-datos" role="tabpanel" aria-labelledby="tab-datos"><h2><i class="fas fa-cogs me-2"></i>Gestionar Datos</h2><div id="import-export-container"><p class="text-muted">Import/Export deshabilitado.</p><button type="button" id="btn-exportar-datos" class="btn btn-info me-2" disabled><i class="fas fa-file-export"></i> Exportar</button><label for="input-importar-datos" class="btn-like-label btn-warning" style="opacity:0.65;cursor:not-allowed;"><i class="fas fa-file-import"></i> Importar...</label><input type="file" id="input-importar-datos" accept=".json" style="display:none;" disabled><div id="mensaje-datos" class="mt-3"><div class="alert alert-info">Import/Export deshabilitado.</div></div></div></div>
+            </div>
+            <div id="mensaje-global"></div>
+        </div>
+    </div>
+
+    <!-- Área de Impresión -->
+    <div id="printable-factura" aria-hidden="true" style="display: none;"></div>
+    <!-- Modal Confirmación (Genérico) -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-danger text-white"><h5 class="modal-title" id="confirmDeleteModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Confirmar Acción</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><p id="confirmDeleteMessage">¿Estás seguro?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button><button type="button" class="btn btn-danger btn-sm" id="confirmDeleteBtn"><i class="fas fa-check"></i> Confirmar</button></div></div></div></div>
+    <!-- Modal Registrar Pago CXC -->
+    <div class="modal fade" id="registrarPagoModal" tabindex="-1" aria-labelledby="registrarPagoModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-success text-white"><h5 class="modal-title" id="registrarPagoModalLabel"><i class="fas fa-money-check-alt me-2"></i>Registrar Pago</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><form id="form-registrar-pago"><input type="hidden" id="pago-factura-id"><p><strong>Factura ID:</strong> <span id="pago-modal-factura-id-display"></span></p><p><strong>Cliente:</strong> <span id="pago-modal-cliente-nombre-display"></span></p><p><strong>Saldo Actual:</strong> <span id="pago-modal-saldo-actual-display" class="fw-bold"></span></p><div class="mb-3"><label for="pago-monto" class="form-label">Monto a Pagar: <span class="text-danger">*</span></label><input type="number" class="form-control" id="pago-monto" step="0.01" min="0.01" required></div><div class="mb-3"><label for="pago-fecha" class="form-label">Fecha de Pago: <span class="text-danger">*</span></label><input type="date" class="form-control" id="pago-fecha" required></div><div class="mb-3"><label for="pago-metodo" class="form-label">Método:</label><select class="form-select" id="pago-metodo"><option value="">Seleccione...</option><option value="Efectivo $">Efectivo $</option><option value="Efectivo Bs.">Efectivo Bs.</option><option value="Pago Movil">Pago Móvil</option><option value="Transferencia">Transferencia</option><option value="Zelle">Zelle</option><option value="Punto de Venta">Punto de Venta</option><option value="Otro">Otro</option></select></div><div class="mb-3"><label for="pago-referencia" class="form-label">Referencia:</label><input type="text" class="form-control" id="pago-referencia"></div><div class="mb-3"><label for="pago-observaciones" class="form-label">Observaciones:</label><textarea class="form-control" id="pago-observaciones" rows="2"></textarea></div></form><div id="mensaje-pago-modal" class="mt-2"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button><button type="button" class="btn btn-success btn-sm" id="btn-confirmar-pago"><i class="fas fa-check"></i> Registrar Pago</button></div></div></div></div>
+    <!-- Modal Historial Pagos Factura -->
+    <div class="modal fade" id="historialPagosModal" tabindex="-1" aria-labelledby="historialPagosModalLabel" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="historialPagosModalLabel">Historial de Pagos - Factura ID: <span id="historial-pagos-factura-id-display"></span></h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><p><strong>Cliente:</strong> <span id="historial-pagos-cliente-nombre-display"></span></p><p><strong>Total Factura:</strong> <span id="historial-pagos-total-factura-display"></span> | <strong>Saldo Pendiente:</strong> <span id="historial-pagos-saldo-pendiente-display" class="fw-bold"></span></p><div id="historial-pagos-loading" class="text-center" style="display:none;"><div class="spinner-border spinner-border-sm" role="status"></div> Cargando pagos...</div><div class="table-responsive"><table class="table table-sm table-striped"><thead class="table-light"><tr><th>Fecha Pago</th><th class="num">Monto Pagado</th><th>Método</th><th>Referencia</th><th>Observaciones</th><th>Registrado por</th><th>Fecha Registro</th></tr></thead><tbody id="cuerpo-tabla-historial-pagos"></tbody></table></div><div id="mensaje-historial-pagos-modal" class="mt-2"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button></div></div></div></div>
+    <!-- Modal Motivo Anulación Factura -->
+    <div class="modal fade" id="motivoAnulacionModal" tabindex="-1" aria-labelledby="motivoAnulacionModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-warning text-dark"><h5 class="modal-title" id="motivoAnulacionModalLabel"><i class="fas fa-comment-slash me-2"></i>Anular Factura - ID: <span id="anular-factura-id-display"></span></h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><form id="form-motivo-anulacion"><input type="hidden" id="anular-factura-id-input"><div class="mb-3"><label for="motivo-anulacion-texto" class="form-label">Motivo de la Anulación: <span class="text-danger">*</span></label><textarea class="form-control" id="motivo-anulacion-texto" rows="3" required></textarea></div></form><div id="mensaje-motivo-anulacion-modal" class="mt-2"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button><button type="button" class="btn btn-warning btn-sm" id="btn-confirmar-anulacion"><i class="fas fa-check"></i> Confirmar Anulación</button></div></div></div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        // --- INICIO DEL BLOQUE JAVASCRIPT COMPLETO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const API_BASE_URL = 'http://localhost/inventario/api'; 
+            const MONEDA = '$'; const MAX_ITEMS_FACTURA = 15;
+
+            const motivoAnulacionModalEl = document.getElementById('motivoAnulacionModal');
+            const motivoAnulacionModal = motivoAnulacionModalEl ? new bootstrap.Modal(motivoAnulacionModalEl) : null;
+            const formMotivoAnulacion = document.getElementById('form-motivo-anulacion');
+            const displayAnularFacturaId = document.getElementById('anular-factura-id-display');
+            const inputAnularFacturaId = document.getElementById('anular-factura-id-input');
+            const textareaMotivoAnulacion = document.getElementById('motivo-anulacion-texto');
+            const mensajeMotivoAnulacionModal = document.getElementById('mensaje-motivo-anulacion-modal');
+            const btnConfirmarAnulacion = document.getElementById('btn-confirmar-anulacion');
+            const filtroFacturasVerAnuladas = document.getElementById('filtro-facturas-ver-anuladas');
+
+
+            const loginContainer = document.getElementById('login-container'); const appContainer = document.getElementById('app-container'); const loginForm = document.getElementById('login-form'); const loginMessage = document.getElementById('login-message'); const logoutBtn = document.getElementById('logout-btn');
+            const statTotalProductosEl = document.getElementById('stat-total-productos'); const statBajoStockEl = document.getElementById('stat-bajo-stock'); const statValorTotalEl = document.getElementById('stat-valor-total'); const statTotalFacturasEl = document.getElementById('stat-total-facturas'); const resumenCardsContainer = document.getElementById('resumen-cards-container'); const resumenLoadingPlaceholder = document.getElementById('resumen-loading-placeholder'); const resumenErrorPlaceholder = document.getElementById('resumen-error-placeholder');
+            const formNuevoProducto = document.getElementById('form-nuevo-producto'); const inputDepto = document.getElementById('producto-departamento'); const inputDesc = document.getElementById('producto-descripcion'); const selectMedida = document.getElementById('producto-medida'); const mensajeProducto = document.getElementById('mensaje-producto');
+            const formCliente = document.getElementById('form-cliente'); const inputClienteIdEdit = document.getElementById('cliente-id-edit'); const inputClienteNombre = document.getElementById('cliente-nombre'); const inputClienteCodigoAlfanumerico = document.getElementById('cliente-codigo-alfanumerico'); const inputClienteIdentificacion = document.getElementById('cliente-identificacion'); const inputClienteTelefono = document.getElementById('cliente-telefono'); const inputClienteDireccion = document.getElementById('cliente-direccion'); const inputClienteEmail = document.getElementById('cliente-email'); const inputClienteActivo = document.getElementById('cliente-activo'); const clienteFormTitle = document.getElementById('cliente-form-title'); const btnCancelarClienteEdicion = document.getElementById('btn-cancelar-cliente-edicion'); const mensajeCliente = document.getElementById('mensaje-cliente'); const cuerpoTablaClientes = document.getElementById('cuerpo-tabla-clientes'); 
+            const formMovimiento = document.getElementById('form-movimiento'); const inputMovProducto = document.getElementById('movimiento-producto-input'); const datalistProductos = document.getElementById('productos-lista'); const hiddenMovProductoId = document.getElementById('movimiento-producto-id'); const selectMovTipo = document.getElementById('movimiento-tipo'); const precioContainer = document.getElementById('precio-container'); const inputMovPrecio = document.getElementById('movimiento-precio'); const proveedorContainer = document.getElementById('proveedor-container'); const inputMovProveedor = document.getElementById('movimiento-proveedor'); const clienteContainer = document.getElementById('cliente-container'); const inputMovCliente = document.getElementById('movimiento-cliente'); const inputMovCantidad = document.getElementById('movimiento-cantidad'); const inputMovFecha = document.getElementById('movimiento-fecha'); const mensajeMovimiento = document.getElementById('mensaje-movimiento');
+            const cuerpoTablaInventario = document.getElementById('cuerpo-tabla-inventario'); const cuerpoTablaHistorial = document.getElementById('cuerpo-tabla-historial'); const cuerpoTablaHistorialFacturas = document.getElementById('cuerpo-tabla-historial-facturas');
+            const facturaFecha = document.getElementById('factura-fecha'); 
+            const inputFacturaCliente = document.getElementById('factura-cliente-input'); // Cambio de select a input
+            const datalistFacturaClientes = document.getElementById('factura-clientes-lista'); // Nuevo datalist
+            const hiddenFacturaClienteId = document.getElementById('factura-cliente-id-hidden'); // Nuevo campo oculto
+            const selectFacturaCondicionPago = document.getElementById('factura-condicion-pago'); const facturaFechaVencimientoContainer = document.getElementById('factura-fecha-vencimiento-container'); const inputFacturaFechaVencimiento = document.getElementById('factura-fecha-vencimiento'); const cuerpoTablaFacturaItems = document.getElementById('cuerpo-tabla-factura-items'); const btnAddFacturaItem = document.getElementById('btn-add-factura-item'); const facturaTotalDisplay = document.getElementById('factura-total-display'); const btnGuardarFactura = document.getElementById('btn-guardar-factura'); const mensajeFactura = document.getElementById('mensaje-factura'); const formFactura = document.getElementById('form-factura');
+            const tabCXCButton = document.getElementById('tab-cxc'); const selectFiltroCXCCliente = document.getElementById('filtro-cxc-cliente'); const selectFiltroCXCEstado = document.getElementById('filtro-cxc-estado'); const inputFiltroCXCFacturaId = document.getElementById('filtro-cxc-factura-id'); const btnAplicarFiltroCXC = document.getElementById('btn-aplicar-filtro-cxc'); const limpiarFiltroCXCBtn = document.getElementById('limpiar-filtro-cxc'); const cuerpoTablaCXC = document.getElementById('cuerpo-tabla-cxc'); const registrarPagoModalEl = document.getElementById('registrarPagoModal'); const registrarPagoModal = registrarPagoModalEl ? new bootstrap.Modal(registrarPagoModalEl) : null; const formRegistrarPago = document.getElementById('form-registrar-pago'); const inputPagoFacturaId = document.getElementById('pago-factura-id'); const displayPagoModalFacturaId = document.getElementById('pago-modal-factura-id-display'); const displayPagoModalClienteNombre = document.getElementById('pago-modal-cliente-nombre-display'); const displayPagoModalSaldoActual = document.getElementById('pago-modal-saldo-actual-display'); const inputPagoMonto = document.getElementById('pago-monto'); const inputPagoFecha = document.getElementById('pago-fecha'); const selectPagoMetodo = document.getElementById('pago-metodo'); const inputPagoReferencia = document.getElementById('pago-referencia'); const textareaPagoObservaciones = document.getElementById('pago-observaciones'); const mensajePagoModal = document.getElementById('mensaje-pago-modal'); const btnConfirmarPago = document.getElementById('btn-confirmar-pago');
+            const historialPagosModalEl = document.getElementById('historialPagosModal'); const historialPagosModal = historialPagosModalEl ? new bootstrap.Modal(historialPagosModalEl) : null; const displayHistorialPagosFacturaId = document.getElementById('historial-pagos-factura-id-display'); const displayHistorialPagosClienteNombre = document.getElementById('historial-pagos-cliente-nombre-display'); const displayHistorialPagosTotalFactura = document.getElementById('historial-pagos-total-factura-display'); const displayHistorialPagosSaldoPendiente = document.getElementById('historial-pagos-saldo-pendiente-display'); const cuerpoTablaHistorialPagos = document.getElementById('cuerpo-tabla-historial-pagos'); const mensajeHistorialPagosModal = document.getElementById('mensaje-historial-pagos-modal'); const historialPagosLoading = document.getElementById('historial-pagos-loading');
+            const mensajeGlobalContainer = document.getElementById('mensaje-global'); const printableArea = document.getElementById('printable-factura'); const themeToggleBtn = document.getElementById('theme-toggle-btn'); const themeIcon = document.getElementById('theme-icon');
+            const confirmDeleteModalEl = document.getElementById('confirmDeleteModal'); const confirmDeleteModal = confirmDeleteModalEl ? new bootstrap.Modal(confirmDeleteModalEl) : null; const confirmDeleteMessage = document.getElementById('confirmDeleteMessage'); let confirmDeleteBtn = document.getElementById('confirmDeleteBtn'); let deleteCallback = null;
+            
+            const filtroInventarioTexto = document.getElementById('filtro-inventario-texto'); 
+            const filtroInventarioStock = document.getElementById('filtro-inventario-stock'); 
+            const filtroInventarioESFechaInicio = document.getElementById('filtro-inventario-es-fecha-inicio'); 
+            const filtroInventarioESFechaFin = document.getElementById('filtro-inventario-es-fecha-fin');       
+            const limpiarFiltroInventarioBtn = document.getElementById('limpiar-filtro-inventario');
+            const inventarioPaginationControls = document.getElementById('inventario-pagination-controls');
+            const inventarioLimitSelect = document.getElementById('inventario-limit-select');
+            const inventarioPaginationInfo = document.getElementById('inventario-pagination-info');
+            const inventarioBtnPrimera = document.getElementById('inventario-btn-primera');
+            const inventarioBtnAnterior = document.getElementById('inventario-btn-anterior');
+            const inventarioPageDisplay = document.getElementById('inventario-page-display');
+            const inventarioBtnSiguiente = document.getElementById('inventario-btn-siguiente');
+            const inventarioBtnUltima = document.getElementById('inventario-btn-ultima');
+            
+            const filtroHistorialTexto = document.getElementById('filtro-historial-texto'); 
+            const filtroHistorialTipo = document.getElementById('filtro-historial-tipo'); 
+            const filtroHistorialFechaInicio = document.getElementById('filtro-historial-fecha-inicio'); 
+            const filtroHistorialFechaFin = document.getElementById('filtro-historial-fecha-fin'); 
+            const limpiarFiltroHistorialBtn = document.getElementById('limpiar-filtro-historial');
+            const historialMovimientosPaginationControls = document.getElementById('historial-movimientos-pagination-controls');
+            const historialLimitSelect = document.getElementById('historial-limit-select');
+            const historialPaginationInfo = document.getElementById('historial-pagination-info');
+            const historialBtnPrimera = document.getElementById('historial-btn-primera');
+            const historialBtnAnterior = document.getElementById('historial-btn-anterior');
+            const historialPageDisplay = document.getElementById('historial-page-display');
+            const historialBtnSiguiente = document.getElementById('historial-btn-siguiente');
+            const historialBtnUltima = document.getElementById('historial-btn-ultima');
+
+            const filtroFacturasTexto = document.getElementById('filtro-facturas-texto'); 
+            const filtroFacturasFechaInicio = document.getElementById('filtro-facturas-fecha-inicio'); 
+            const filtroFacturasFechaFin = document.getElementById('filtro-facturas-fecha-fin'); 
+            const limpiarFiltroFacturasBtn = document.getElementById('limpiar-filtro-facturas');
+            const histfactPaginationControls = document.getElementById('historial-facturas-pagination-controls');
+            const histfactLimitSelect = document.getElementById('histfact-limit-select');
+            const histfactPaginationInfo = document.getElementById('histfact-pagination-info');
+            const histfactBtnPrimera = document.getElementById('histfact-btn-primera');
+            const histfactBtnAnterior = document.getElementById('histfact-btn-anterior');
+            const histfactPageDisplay = document.getElementById('histfact-page-display');
+            const histfactBtnSiguiente = document.getElementById('histfact-btn-siguiente');
+            const histfactBtnUltima = document.getElementById('histfact-btn-ultima');
+
+            const btnExportarDatos = document.getElementById('btn-exportar-datos'); const inputImportarDatos = document.getElementById('input-importar-datos'); const mensajeDatos = document.getElementById('mensaje-datos');
+
+            let listaProductosGlobal = []; let listaMovimientosGlobal = []; let listaFacturasGlobal = []; let listaClientesGlobal = []; let listaCXCGlobal = []; let currentUserRole = null; 
+            
+            let inventarioCurrentPage = 1, inventarioLimit = 25, inventarioTotalPages = 0, inventarioTotalRecords = 0;
+            let inventarioFiltrosActuales = { texto: '', stock: '', esFechaInicio: '', esFechaFin: '' }; 
+            let historialMovimientosCurrentPage = 1, historialMovimientosLimit = 25, historialMovimientosTotalPages = 0, historialMovimientosTotalRecords = 0;
+            let historialMovimientosFiltrosActuales = { texto: '', tipo: '', fechaInicio: '', fechaFin: '' };
+            let histFacturasCurrentPage = 1, histFacturasLimit = 25, histFacturasTotalPages = 0, histFacturasTotalRecords = 0;
+            let histFacturasFiltrosActuales = { texto: '', fechaInicio: '', fechaFin: '', ver_anuladas: false }; 
+
+
+            const mostrarMensaje = (el, txt, tipo = 'success', dur = 4000) => { if (!el) { console.error("Elemento mensaje no encontrado:", el); return; } if (el.id === 'mensaje-global') { const toastId = 'toast-' + Date.now(); const toastHTML = `<div id="${toastId}" class="toast align-items-center text-bg-${tipo} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="${dur}"><div class="d-flex"><div class="toast-body">${txt}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div></div>`; el.insertAdjacentHTML('beforeend', toastHTML); const toastElement = document.getElementById(toastId); if (!toastElement) return; const toast = new bootstrap.Toast(toastElement); toastElement.addEventListener('hidden.bs.toast', () => { toastElement.remove(); }); toast.show(); return; } if (el.timerId) { clearTimeout(el.timerId); } el.innerHTML = `<div class="alert alert-${tipo} alert-dismissible fade show" role="alert">${txt}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>`; el.style.display = 'block'; const alertElement = el.querySelector('.alert'); if (!alertElement) return; if (dur > 0) { el.timerId = setTimeout(() => { const currentAlert = el.querySelector('.alert'); if (currentAlert && currentAlert.textContent.includes(txt)) { const bsAlert = bootstrap.Alert.getOrCreateInstance(currentAlert); if (bsAlert) { bsAlert.close(); } else { el.innerHTML = ''; el.style.display = 'none'; } } delete el.timerId; }, dur); } };
+            const formatCurrency = (value) => (typeof value === 'number' && !isNaN(value)) ? `${value.toFixed(2)} ${MONEDA}` : (typeof value !== 'undefined' && value !== null ? `${Number(value).toFixed(2)} ${MONEDA}` : '-');
+            const formatNumber = (value, decimals = 0) => (typeof Number(value) === 'number' && !isNaN(Number(value))) ? Number(value).toFixed(decimals) : (0).toFixed(decimals);
+            const normalizarTexto = (texto) => texto ? texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+
+            const fetchData = async (endpoint, options = {}) => { const defaultOptions = { credentials: 'include' }; const finalOptions = { ...defaultOptions, ...options }; if (options.headers) { finalOptions.headers = { ...defaultOptions.headers, ...options.headers }; } const url = `${API_BASE_URL}/${endpoint}`; try { const response = await fetch(url, finalOptions); const responseData = await response.json(); if (!response.ok) { const errorMessage = responseData.message || `Error HTTP ${response.status}`; if (response.status === 401 && loginContainer && appContainer) { mostrarMensaje(loginMessage, `Sesión expirada o no autorizado. Inicie sesión. (${errorMessage})`, 'warning'); appContainer.style.display = 'none'; loginContainer.style.display = 'block'; sessionStorage.removeItem('currentUserRole'); currentUserRole = null; } throw new Error(errorMessage); } if (responseData.hasOwnProperty('success') && !responseData.success) { console.warn("API call reported failure:", responseData); if (responseData.debug_info) console.warn("Debug Info:", responseData.debug_info); throw new Error(responseData.message || 'Operación falló.'); } return responseData; } catch (error) { mostrarMensaje(mensajeGlobalContainer, `Error API: ${error.message || error}`, 'danger', 6000); throw error; } };
+            
+            const cargarProductosAPI = (page = 1, limit = 25, filtros = {}) => {
+                const params = new URLSearchParams({ page: page, limit: limit });
+                if (filtros.texto && filtros.texto.trim() !== '') params.append('filtro_texto', filtros.texto.trim());
+                if (filtros.stock && filtros.stock !== 'todos') params.append('filtro_stock', filtros.stock);
+                if (filtros.esFechaInicio) params.append('filtro_es_fecha_inicio', filtros.esFechaInicio); 
+                if (filtros.esFechaFin) params.append('filtro_es_fecha_fin', filtros.esFechaFin);       
+                return fetchData(`productos.php?${params.toString()}`);
+            };
+            const cargarMovimientosAPI = (page = 1, limit = 25, filtros = {}) => {
+                const params = new URLSearchParams({ page: page, limit: limit });
+                if (filtros.texto && filtros.texto.trim() !== '') params.append('filtro_texto', filtros.texto.trim());
+                if (filtros.tipo) params.append('filtro_tipo', filtros.tipo);
+                if (filtros.fechaInicio) params.append('filtro_fecha_inicio', filtros.fechaInicio);
+                if (filtros.fechaFin) params.append('filtro_fecha_fin', filtros.fechaFin);
+                return fetchData(`movimientos.php?${params.toString()}`);
+            };
+            const cargarListaFacturasAPI = (page = 1, limit = 25, filtros = {}) => { 
+                const params = new URLSearchParams({ page: page, limit: limit });
+                if (filtros.texto && filtros.texto.trim() !== '') params.append('filtro_texto', filtros.texto.trim());
+                if (filtros.fechaInicio) params.append('filtro_fecha_inicio', filtros.fechaInicio);
+                if (filtros.fechaFin) params.append('filtro_fecha_fin', filtros.fechaFin);
+                if (filtros.ver_anuladas) params.append('ver_anuladas', '1'); 
+                return fetchData(`facturas.php?${params.toString()}`);
+            };
+            const cargarFacturaDetalleAPI = (id) => fetchData(`facturas.php?id=${id}`).then(r => r.data); 
+            const guardarProductoAPI = (p) => fetchData('productos.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(p) }).then(r => r.data); 
+            const guardarMovimientoAPI = (m) => fetchData('movimientos.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(m) }).then(r => r.data); 
+            const guardarFacturaAPI = (f) => fetchData('facturas.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(f) }); 
+            const eliminarProductoAPI = (id) => fetchData(`productos.php?id=${id}`, { method: 'DELETE' }); 
+            const eliminarMovimientoAPI = (id) => fetchData(`movimientos.php?id=${id}`, { method: 'DELETE' }); 
+            const anularFacturaAPI = (id, motivo) => fetchData(`facturas.php?id=${id}`, { 
+                method: 'PUT', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({ motivo_anulacion: motivo }) 
+            });
+            const cargarClientesAPI = (soloActivos = false) => fetchData(`clientes.php${soloActivos ? '?activo=1' : ''}`).then(r => r.data); 
+            const guardarClienteAPI = (c) => fetchData('clientes.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(c) }); 
+            const actualizarClienteAPI = (id, c) => fetchData(`clientes.php?id=${id}`, { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(c) }); 
+            const toggleActivoClienteAPI = (id) => fetchData(`clientes.php?id=${id}`, { method: 'DELETE' }); 
+            const cargarCXCAPI = (params = {}) => fetchData(`cxc.php${Object.keys(params).length > 0 ? '?' + new URLSearchParams(params).toString() : ''}`).then(r => r.data);
+            const registrarPagoAPI = (pagoData) => fetchData('cxc.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(pagoData) }); 
+            const cargarHistorialPagosFacturaAPI = (facturaId) => fetchData(`cxc.php?historial_pagos_factura_id=${facturaId}`).then(r => r.data);
+            
+            const popularDatalistProductos = (productos) => { if (!datalistProductos) return; datalistProductos.innerHTML = ''; if (productos && productos.length > 0) { productos.forEach(pr => { if (!pr || typeof pr.id === 'undefined') return; const cP = String(pr.codigo || 0).padStart(3, '0'); const o = document.createElement('option'); o.value = `[${cP}] ${pr.descripcion || '?'} (${pr.departamento || '?'}) - ${pr.medida || '?'}`; o.dataset.id = pr.id; const precioRef = (pr.ultimo_precio_compra !== null && typeof pr.ultimo_precio_compra !== 'undefined') ? pr.ultimo_precio_compra : ''; o.dataset.precio = precioRef; o.dataset.medida = pr.medida || ''; datalistProductos.appendChild(o); }); } };
+            const renderizarTablaInventario = (productos) => { 
+                if (!cuerpoTablaInventario) return; 
+                cuerpoTablaInventario.innerHTML = ''; 
+                if (!productos || productos.length === 0) { 
+                    cuerpoTablaInventario.innerHTML = `<tr><td colspan="9" class="text-center p-3 fst-italic text-muted">No hay productos con los filtros aplicados.</td></tr>`;
+                    return; 
+                } 
+                productos.forEach(pr => { 
+                    if (!pr || typeof pr.id === 'undefined') return; 
+                    const cP = String(pr.codigo || 0).padStart(3, '0'); 
+                    const stockValue = (pr.stock_actual === null || typeof pr.stock_actual === 'undefined') ? 0 : Number(pr.stock_actual); 
+                    const stock = formatNumber(stockValue, 2); 
+                    const uPrecio = formatCurrency(pr.ultimo_precio_compra); 
+                    let stockClass = ''; 
+                    if (stockValue < 0) { stockClass = 'stock-negativo'; } else if (stockValue === 0) { stockClass = 'stock-cero'; } 
+                    const stockHtml = stockClass ? `<span class="${stockClass}">${stock}</span>` : stock; 
+                    const totalEntradas = formatNumber(pr.total_entradas_periodo, 2) || '0.00';
+                    const totalSalidas = formatNumber(pr.total_salidas_periodo, 2) || '0.00';
+                    const f = document.createElement('tr'); 
+                    f.innerHTML = `
+                        <td>${cP}</td>
+                        <td>${pr.departamento || '?'}</td>
+                        <td>${pr.descripcion || '?'}</td>
+                        <td>${pr.medida || '?'}</td>
+                        <td class="num">${stockHtml}</td>
+                        <td class="num">${uPrecio}</td>
+                        <td class="num text-success">${totalEntradas}</td>
+                        <td class="num text-danger">${totalSalidas}</td>
+                        <td><button class="btn btn-danger btn-sm btn-eliminar-producto" data-id="${pr.id}" title="Eliminar Producto" ${currentUserRole !== 'Administrador' ? 'disabled' : ''}><i class="fas fa-trash-alt"></i></button></td>`; 
+                    cuerpoTablaInventario.appendChild(f); 
+                }); 
+            };
+            const renderizarTablaHistorial = (movimientos) => { if (!cuerpoTablaHistorial) return; cuerpoTablaHistorial.innerHTML = ''; if (!movimientos || movimientos.length === 0) { cuerpoTablaHistorial.innerHTML = `<tr><td colspan="8" class="text-center p-3 fst-italic text-muted">No hay movimientos con los filtros aplicados.</td></tr>`; return; } movimientos.forEach(mv => { if (!mv || typeof mv.id === 'undefined') return; const cP = String(mv.producto_codigo || 0).padStart(3, '0'); const dP = `[${cP}] ${mv.producto_descripcion || '?'}`; const medP = mv.producto_medida || ''; let fF = 'Inv.'; try { if (mv.fecha) { const date = new Date(mv.fecha + 'T00:00:00Z'); fF = date.toLocaleDateString('es-ES', { timeZone:'UTC', day: '2-digit', month: '2-digit', year: 'numeric' }); } } catch(e) {} const tM = mv.tipo ? (mv.tipo.charAt(0).toUpperCase() + mv.tipo.slice(1)) : '?'; const tipoClass = mv.tipo === 'entrada' ? 'text-success' : 'text-warning'; const cM = formatNumber(mv.cantidad, 2); const pT = formatCurrency(mv.precio_unitario); let pcT = '-'; if (mv.tipo === 'entrada' && mv.proveedor) pcT = mv.proveedor; else if (mv.tipo === 'salida' && mv.cliente) pcT = mv.cliente; const rF = mv.factura_id ? `<a href="#" class="link-ver-factura" data-id="${mv.factura_id}" title="Ver Factura ${mv.factura_id}">${mv.factura_id}</a>` : '-'; const isFacturaMov = (mv.factura_id !== null && typeof mv.factura_id !== 'undefined'); const disableDelete = isFacturaMov || currentUserRole !== 'Administrador'; const deleteTitle = isFacturaMov ? `Elimine la factura (ID: ${mv.factura_id})` : (currentUserRole !== 'Administrador' ? 'Permiso denegado' : 'Eliminar Movimiento'); const f = document.createElement('tr'); f.innerHTML = `<td>${fF}</td><td>${dP}</td><td><span class="${tipoClass}">${tM}</span></td><td class="num">${cM} ${medP}</td><td class="num">${pT}</td><td>${pcT}</td><td>${rF}</td><td><button class="btn btn-danger btn-sm btn-eliminar-movimiento" data-id="${mv.id}" ${disableDelete ? 'disabled' : ''} title="${deleteTitle}"><i class="fas fa-trash-alt"></i></button></td>`; cuerpoTablaHistorial.appendChild(f); }); };
+            const renderizarTablaHistorialFacturas = (facturas) => {
+                if (!cuerpoTablaHistorialFacturas) return;
+                cuerpoTablaHistorialFacturas.innerHTML = '';
+                if (!facturas || facturas.length === 0) {
+                    cuerpoTablaHistorialFacturas.innerHTML = `<tr><td colspan="8" class="text-center p-3 fst-italic text-muted">No hay facturas con los filtros aplicados.</td></tr>`;
+                    return;
+                }
+                facturas.forEach(fa => {
+                    if (!fa || typeof fa.id === 'undefined') return;
+                    let fF = 'Inv.'; 
+                    try { if (fa.fecha) { const date = new Date(fa.fecha + 'T00:00:00Z'); fF = date.toLocaleDateString('es-ES', { timeZone:'UTC', day: '2-digit', month: '2-digit', year: 'numeric' }); } } catch(e) {}
+                    const totalF = formatCurrency(fa.total);
+                    const clienteParaTabla = fa.cliente_nombre || (fa.cliente || '-');
+                    let condPagoDisplay = fa.condicion_pago ? (fa.condicion_pago.charAt(0).toUpperCase() + fa.condicion_pago.slice(1)) : '-';
+                    let saldoDisplay = (fa.condicion_pago === 'credito' && fa.saldo_pendiente !== null) ? formatCurrency(fa.saldo_pendiente) : '-';
+                    let estadoPagoDisplay = '-';
+
+                    const esAnulada = fa.anulada;
+                    let accionesHtml = '';
+
+                    if (esAnulada) {
+                        estadoPagoDisplay = '<span class="badge bg-dark">Anulada</span>';
+                        accionesHtml = `<button class="btn btn-secondary btn-sm btn-ver-factura-anulada" data-id="${fa.id}" title="Ver Info Factura Anulada"><i class="fas fa-info-circle"></i> Info</button>`;
+                    } else {
+                        if (fa.condicion_pago === 'contado') { estadoPagoDisplay = '<span class="badge bg-light text-dark">Contado</span>';} 
+                        else if (fa.condicion_pago === 'credito') { 
+                            if (fa.estado_pago === 'pagada') estadoPagoDisplay = '<span class="badge bg-success">Pagada</span>'; 
+                            else if (fa.estado_pago === 'parcialmente_pagada') estadoPagoDisplay = '<span class="badge bg-info text-dark">Parcial</span>'; 
+                            else estadoPagoDisplay = `<span class="badge bg-warning text-dark">Pendiente</span>`;
+                        }
+                        accionesHtml = `<button class="btn btn-info btn-sm btn-ver-factura" data-id="${fa.id}" title="Ver/Imprimir Factura"><i class="fas fa-eye"></i> Ver</button>`;
+                        if (fa.condicion_pago === 'credito') { // Mostrar botón "Pagos" para todas las facturas a crédito
+                            accionesHtml += ` <button class="btn btn-outline-secondary btn-sm btn-ver-historial-pagos ms-1" 
+                                                    data-factura-id="${fa.id}" 
+                                                    data-cliente-nombre="${fa.cliente_nombre || ''}" 
+                                                    data-total-factura="${fa.total}" 
+                                                    data-saldo-pendiente="${fa.saldo_pendiente}" 
+                                                    title="Ver Pagos">
+                                                <i class="fas fa-list-alt"></i> Pagos
+                                            </button>`;
+                        }
+                        accionesHtml += ` <button class="btn btn-warning btn-sm btn-anular-factura ms-1" data-id="${fa.id}" title="Anular Factura" ${currentUserRole !== 'Administrador' ? 'disabled' : ''}><i class="fas fa-ban"></i> Anular</button>`;
+                    }
+                    
+                    const fi = document.createElement('tr');
+                    if (esAnulada) fi.classList.add('factura-anulada');
+
+                    fi.innerHTML = `
+                        <td>${fa.id}</td>
+                        <td>${fF}</td>
+                        <td>${clienteParaTabla}</td>
+                        <td class="num">${totalF}</td>
+                        <td>${condPagoDisplay}</td>
+                        <td class="num">${saldoDisplay}</td>
+                        <td>${estadoPagoDisplay}</td>
+                        <td>${accionesHtml}</td>`;
+                    cuerpoTablaHistorialFacturas.appendChild(fi);
+                });
+            };
+            const renderizarResumen = async () => { if (!resumenCardsContainer || !statTotalProductosEl || !statBajoStockEl || !statValorTotalEl || !statTotalFacturasEl) return; if (resumenLoadingPlaceholder) resumenLoadingPlaceholder.style.display = 'none'; if (resumenErrorPlaceholder) resumenErrorPlaceholder.style.display = 'none'; if (resumenCardsContainer) resumenCardsContainer.style.display = 'flex'; try { const [productosFullResponse, facturasFullResponse] = await Promise.all([fetchData('productos.php?todos=1'), fetchData('facturas.php')]); 
+                const prodsData = (productosFullResponse && productosFullResponse.data) ? productosFullResponse.data : []; const factsData = (facturasFullResponse && facturasFullResponse.data) ? facturasFullResponse.data : []; const totalProductos = prodsData.length; const bajoStock = prodsData.filter(p => (p.stock_actual === null || p.stock_actual === undefined || Number(p.stock_actual) <= 0)).length; const valorTotal = prodsData.reduce((sum, p) => { const stock = Number(p.stock_actual) || 0; const precio = Number(p.ultimo_precio_compra) || 0; return sum + (stock * precio); }, 0); const totalFacturas = factsData.filter(f => !f.anulada).length; statTotalProductosEl.textContent = formatNumber(totalProductos); statBajoStockEl.textContent = formatNumber(bajoStock); statValorTotalEl.textContent = formatCurrency(valorTotal); statTotalFacturasEl.textContent = formatNumber(totalFacturas); } catch (error) { console.error("Error en renderizarResumen:", error); if (resumenCardsContainer) resumenCardsContainer.style.display = 'none'; if (resumenErrorPlaceholder) { resumenErrorPlaceholder.style.display = 'block'; resumenErrorPlaceholder.textContent = 'Error al calcular resumen.';}}};
+            const popularDatalistClientesFactura = (clientes) => {
+                if (!datalistFacturaClientes) return;
+                datalistFacturaClientes.innerHTML = ''; 
+                const clientesActivos = clientes.filter(c => c.activo);
+                if (clientesActivos.length > 0) {
+                    clientesActivos.forEach(cli => {
+                        if (!cli || typeof cli.id === 'undefined') return;
+                        const opt = document.createElement('option');
+                        opt.value = `[${cli.id}] ${cli.nombre_razon_social} ${cli.codigo_alfanumerico ? '('+cli.codigo_alfanumerico+')' : ''}`;
+                        opt.dataset.id = cli.id; 
+                        opt.dataset.nombre = cli.nombre_razon_social;
+                        datalistFacturaClientes.appendChild(opt);
+                    });
+                }
+            };
+            const renderizarTablaClientes = (clientes) => {
+                listaClientesGlobal = clientes || [];
+                if (!cuerpoTablaClientes) return;
+                cuerpoTablaClientes.innerHTML = '';
+                if (!clientes || clientes.length === 0) {
+                    cuerpoTablaClientes.innerHTML = `<tr><td colspan="9" class="text-center p-3 fst-italic text-muted">No hay clientes.</td></tr>`;
+                    return;
+                }
+                clientes.forEach(cli => {
+                    if (!cli || typeof cli.id === 'undefined') return;
+                    const esAdmin = currentUserRole === 'Administrador';
+                    const fila = document.createElement('tr');
+                    fila.dataset.clienteId = cli.id;
+                    const estadoActivo = cli.activo ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-secondary">Inactivo</span>';
+                    const deuda = parseFloat(cli.deuda_total_pendiente) || 0;
+                    const deudaDisplay = formatCurrency(deuda);
+                    const deudaClass = deuda > 0 ? 'deuda-pendiente' : 'sin-deuda';
+
+                    fila.innerHTML = `
+                        <td>${cli.id}</td>
+                        <td>${cli.nombre_razon_social || '?'}</td>
+                        <td>${cli.codigo_alfanumerico || '-'}</td>
+                        <td>${cli.identificacion_fiscal || '-'}</td>
+                        <td>${cli.telefono || '-'}</td>
+                        <td class="num ${deudaClass}">${deudaDisplay}</td>
+                        <td>${estadoActivo}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm btn-editar-cliente" data-id="${cli.id}" title="Editar" ${!esAdmin ? 'disabled' : ''}><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-${cli.activo ? 'danger' : 'info'} btn-sm btn-toggle-activo-cliente ms-1" data-id="${cli.id}" title="${cli.activo ? 'Desactivar' : 'Activar'}" ${!esAdmin ? 'disabled' : ''}><i class="fas ${cli.activo ? 'fa-user-slash' : 'fa-user-check'}"></i></button>
+                        </td>`;
+                    cuerpoTablaClientes.appendChild(fila);
+                });
+            };
+            const popularFiltroClientesCXC = (clientes) => { if (!selectFiltroCXCCliente) return; selectFiltroCXCCliente.innerHTML = '<option value="">Todos</option>'; const clientesActivos = clientes.filter(c => c.activo); clientesActivos.forEach(cli => { const opt = document.createElement('option'); opt.value = cli.id; opt.textContent = `[${cli.id}] ${cli.nombre_razon_social} ${cli.codigo_alfanumerico ? '('+cli.codigo_alfanumerico+')' : ''}`; selectFiltroCXCCliente.appendChild(opt); }); };
+            const renderizarTablaCXC = (facturasPendientes) => { listaCXCGlobal = facturasPendientes || []; if (!cuerpoTablaCXC) return; cuerpoTablaCXC.innerHTML = ''; if (!facturasPendientes || facturasPendientes.length === 0) { cuerpoTablaCXC.innerHTML = `<tr><td colspan="9" class="text-center p-3 fst-italic text-muted">No hay CXC con los filtros.</td></tr>`; return; } facturasPendientes.forEach(f => { const fila = document.createElement('tr'); let estadoBadge = ''; if (f.estado_pago === 'pendiente') estadoBadge = '<span class="badge bg-warning text-dark">Pendiente</span>'; else if (f.estado_pago === 'parcialmente_pagada') estadoBadge = '<span class="badge bg-info text-dark">Parcial</span>'; else if (f.estado_pago === 'pagada') estadoBadge = '<span class="badge bg-success">Pagada</span>'; let diasVencidosDisplay = f.dias_vencidos > 0 ? `<span class="text-danger fw-bold">${f.dias_vencidos}</span>` : (f.dias_vencidos === 0 ? '0' : '-'); if (f.estado_pago === 'pagada') diasVencidosDisplay = '-'; const puedeRegistrarPago = currentUserRole === 'Administrador' || currentUserRole === 'Cajero'; fila.innerHTML = `<td>${f.id}</td><td>${f.cliente_nombre || 'N/A'}</td><td>${new Date(f.fecha + 'T00:00:00Z').toLocaleDateString('es-ES',{timeZone:'UTC'})}</td><td>${f.fecha_vencimiento ? new Date(f.fecha_vencimiento + 'T00:00:00Z').toLocaleDateString('es-ES',{timeZone:'UTC'}) : '-'}</td><td class="num">${formatCurrency(f.total)}</td><td class="num fw-bold">${formatCurrency(f.saldo_pendiente)}</td><td>${estadoBadge}</td><td class="num">${diasVencidosDisplay}</td><td>${f.estado_pago !== 'pagada' ? `<button class="btn btn-success btn-sm btn-registrar-pago-cxc me-1" data-factura-id="${f.id}" data-cliente-id="${f.cliente_id}" data-cliente-nombre="${f.cliente_nombre || ''}" data-saldo-actual="${f.saldo_pendiente}" title="Registrar Pago" ${!puedeRegistrarPago ? 'disabled' : ''}><i class="fas fa-dollar-sign"></i> Pagar</button>` : ''}<button class="btn btn-info btn-sm btn-ver-historial-pagos" data-factura-id="${f.id}" data-cliente-nombre="${f.cliente_nombre || ''}" data-total-factura="${f.total}" data-saldo-pendiente="${f.saldo_pendiente}" title="Ver Pagos"><i class="fas fa-list-alt"></i> Pagos</button>${f.estado_pago === 'pagada' && f.condicion_pago === 'credito' ? '<span class="ms-1 badge bg-light text-dark">Crédito Pagado</span>' : ''}${f.estado_pago === 'pagada' && f.condicion_pago === 'contado' ? '<span class="ms-1 badge bg-light text-dark">Contado</span>' : ''}</td>`; cuerpoTablaCXC.appendChild(fila); }); };
+            const renderizarTablaHistorialPagos = (pagos) => { if (!cuerpoTablaHistorialPagos || !mensajeHistorialPagosModal) return; cuerpoTablaHistorialPagos.innerHTML = ''; mensajeHistorialPagosModal.innerHTML = ''; if (!pagos || pagos.length === 0) { cuerpoTablaHistorialPagos.innerHTML = `<tr><td colspan="7" class="text-center p-3 fst-italic text-muted">No hay pagos registrados para esta factura.</td></tr>`; return; } pagos.forEach(p => { const fila = document.createElement('tr'); let fechaPagoFmt = 'N/A'; if (p.fecha_pago) { try { const dateObj = new Date(p.fecha_pago + 'T00:00:00Z'); if (!isNaN(dateObj)) { fechaPagoFmt = dateObj.toLocaleDateString('es-ES', { timeZone: 'UTC' }); } else { fechaPagoFmt = "Fecha Inválida (pago)";} } catch (e) { fechaPagoFmt = "Error Fecha (pago)";}} let fechaRegistroFmt = 'N/A'; if (p.fecha_registro_pago) { try { const dateStrCorregido = p.fecha_registro_pago.replace(' ', 'T'); const dateObj = new Date(dateStrCorregido); if (!isNaN(dateObj)) { fechaRegistroFmt = dateObj.toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });} else { fechaRegistroFmt = "Fecha Inválida (registro)"; } } catch (e) { fechaRegistroFmt = "Error Fecha (registro)";}} fila.innerHTML = `<td>${fechaPagoFmt}</td><td class="num">${formatCurrency(p.monto_pagado)}</td><td>${p.metodo_pago || '-'}</td><td>${p.referencia_pago || '-'}</td><td>${p.observaciones || '-'}</td><td>${p.usuario_registro_nombre || 'Sistema'}</td><td>${fechaRegistroFmt}</td>`; cuerpoTablaHistorialPagos.appendChild(fila); });};
+            
+            const renderizarControlesPaginacion = (tipo, currentPage, totalPages, totalRecords, limit, elements) => {
+                const { btnPrimera, btnAnterior, pageDisplay, btnSiguiente, btnUltima, paginationInfo, limitSelect, paginationControls } = elements;
+                if (!btnPrimera || !pageDisplay || !paginationInfo || !limitSelect || !paginationControls) return;
+                
+                limitSelect.value = limit;
+                if (totalRecords <= 0) {
+                    pageDisplay.textContent = 'Pág. 0 de 0';
+                    paginationInfo.textContent = `0 registros.`;
+                    [btnPrimera, btnAnterior, btnSiguiente, btnUltima].forEach(btn => btn.parentElement.classList.add('disabled'));
+                    paginationControls.style.display = 'none';
+                    return;
+                }
+                paginationControls.style.display = 'flex';
+                pageDisplay.textContent = `Pág. ${currentPage} de ${totalPages}`;
+                const primerRegistro = (currentPage - 1) * limit + 1;
+                const ultimoRegistro = Math.min(currentPage * limit, totalRecords);
+                paginationInfo.textContent = `${totalRecords > 0 ? primerRegistro + '-' + ultimoRegistro : '0'} de ${totalRecords} registros.`;
+                btnPrimera.parentElement.classList.toggle('disabled', currentPage <= 1);
+                btnAnterior.parentElement.classList.toggle('disabled', currentPage <= 1);
+                btnSiguiente.parentElement.classList.toggle('disabled', currentPage >= totalPages);
+                btnUltima.parentElement.classList.toggle('disabled', currentPage >= totalPages);
+            };
+            
+            const cargarYRenderizarInventario = async () => {
+                if (!cuerpoTablaInventario) return;
+                cuerpoTablaInventario.innerHTML = `<tr><td colspan="9" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando inventario...</td></tr>`;
+                if(inventarioPaginationControls) inventarioPaginationControls.style.display = 'none';
+                try {
+                    const response = await cargarProductosAPI(inventarioCurrentPage, inventarioLimit, inventarioFiltrosActuales);
+                    if (response && response.success) {
+                        renderizarTablaInventario(response.data);
+                        inventarioCurrentPage = response.pagination.currentPage;
+                        inventarioLimit = response.pagination.limit;
+                        inventarioTotalRecords = response.pagination.totalRecords;
+                        inventarioTotalPages = response.pagination.totalPages;
+                        renderizarControlesPaginacion('inventario', inventarioCurrentPage, inventarioTotalPages, inventarioTotalRecords, inventarioLimit, { btnPrimera: inventarioBtnPrimera, btnAnterior: inventarioBtnAnterior, pageDisplay: inventarioPageDisplay, btnSiguiente: inventarioBtnSiguiente, btnUltima: inventarioBtnUltima, paginationInfo: inventarioPaginationInfo, limitSelect: inventarioLimitSelect, paginationControls: inventarioPaginationControls });
+                    } else { throw new Error(response.message || 'Error al cargar inventario.'); }
+                } catch (error) { mostrarMensaje(mensajeGlobalContainer, `Error obteniendo inventario: ${error.message}`, 'danger'); if(cuerpoTablaInventario) cuerpoTablaInventario.innerHTML = `<tr><td colspan="9" class="text-center p-3 text-danger">Error al cargar inventario.</td></tr>`; renderizarControlesPaginacion('inventario', 0,0,0,inventarioLimit, { btnPrimera: inventarioBtnPrimera, btnAnterior: inventarioBtnAnterior, pageDisplay: inventarioPageDisplay, btnSiguiente: inventarioBtnSiguiente, btnUltima: inventarioBtnUltima, paginationInfo: inventarioPaginationInfo, limitSelect: inventarioLimitSelect, paginationControls: inventarioPaginationControls }); }
+            };
+            const aplicarFiltrosInventario = () => { 
+                inventarioFiltrosActuales.texto = filtroInventarioTexto ? filtroInventarioTexto.value : ''; 
+                inventarioFiltrosActuales.stock = filtroInventarioStock ? filtroInventarioStock.value : ''; 
+                inventarioFiltrosActuales.esFechaInicio = filtroInventarioESFechaInicio ? filtroInventarioESFechaInicio.value : ''; 
+                inventarioFiltrosActuales.esFechaFin = filtroInventarioESFechaFin ? filtroInventarioESFechaFin.value : '';       
+                inventarioCurrentPage = 1; 
+                cargarYRenderizarInventario(); 
+            };
+
+            const cargarYRenderizarHistorialMovimientos = async () => {
+                if (!cuerpoTablaHistorial) return;
+                cuerpoTablaHistorial.innerHTML = `<tr><td colspan="8" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando movimientos...</td></tr>`;
+                if(historialMovimientosPaginationControls) historialMovimientosPaginationControls.style.display = 'none';
+                try {
+                    const response = await cargarMovimientosAPI(historialMovimientosCurrentPage, historialMovimientosLimit, historialMovimientosFiltrosActuales);
+                    if (response && response.success) {
+                        renderizarTablaHistorial(response.data); 
+                        historialMovimientosCurrentPage = response.pagination.currentPage;
+                        historialMovimientosLimit = response.pagination.limit;
+                        historialMovimientosTotalRecords = response.pagination.totalRecords;
+                        historialMovimientosTotalPages = response.pagination.totalPages;
+                        renderizarControlesPaginacion('historialMov', historialMovimientosCurrentPage, historialMovimientosTotalPages, historialMovimientosTotalRecords, historialMovimientosLimit, { btnPrimera: historialBtnPrimera, btnAnterior: historialBtnAnterior, pageDisplay: historialPageDisplay, btnSiguiente: historialBtnSiguiente, btnUltima: historialBtnUltima, paginationInfo: historialPaginationInfo, limitSelect: historialLimitSelect, paginationControls: historialMovimientosPaginationControls });
+                    } else { throw new Error(response.message || 'Error al cargar movimientos.'); }
+                } catch (error) { mostrarMensaje(mensajeGlobalContainer, `Error obteniendo movimientos: ${error.message}`, 'danger'); if(cuerpoTablaHistorial) cuerpoTablaHistorial.innerHTML = `<tr><td colspan="8" class="text-center p-3 text-danger">Error al cargar movimientos.</td></tr>`; renderizarControlesPaginacion('historialMov', 0,0,0,historialMovimientosLimit,{ btnPrimera: historialBtnPrimera, btnAnterior: historialBtnAnterior, pageDisplay: historialPageDisplay, btnSiguiente: historialBtnSiguiente, btnUltima: historialBtnUltima, paginationInfo: historialPaginationInfo, limitSelect: historialLimitSelect, paginationControls: historialMovimientosPaginationControls });}
+            };
+            const aplicarFiltrosHistorialMov = () => { historialMovimientosFiltrosActuales.texto = filtroHistorialTexto ? filtroHistorialTexto.value : ''; historialMovimientosFiltrosActuales.tipo = filtroHistorialTipo ? filtroHistorialTipo.value : ''; historialMovimientosFiltrosActuales.fechaInicio = filtroHistorialFechaInicio ? filtroHistorialFechaInicio.value : ''; historialMovimientosFiltrosActuales.fechaFin = filtroHistorialFechaFin ? filtroHistorialFechaFin.value : ''; historialMovimientosCurrentPage = 1; cargarYRenderizarHistorialMovimientos(); };
+
+            const cargarYRenderizarHistorialFacturas = async () => {
+                if (!cuerpoTablaHistorialFacturas) return;
+                cuerpoTablaHistorialFacturas.innerHTML = `<tr><td colspan="8" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando facturas...</td></tr>`;
+                if(histfactPaginationControls) histfactPaginationControls.style.display = 'none';
+                try {
+                    const response = await cargarListaFacturasAPI(histFacturasCurrentPage, histFacturasLimit, histFacturasFiltrosActuales);
+                    if (response && response.success) {
+                        renderizarTablaHistorialFacturas(response.data);
+                        histFacturasCurrentPage = response.pagination.currentPage;
+                        histFacturasLimit = response.pagination.limit;
+                        histFacturasTotalRecords = response.pagination.totalRecords;
+                        histFacturasTotalPages = response.pagination.totalPages;
+                        renderizarControlesPaginacion('histFact', histFacturasCurrentPage, histFacturasTotalPages, histFacturasTotalRecords, histFacturasLimit, { btnPrimera: histfactBtnPrimera, btnAnterior: histfactBtnAnterior, pageDisplay: histfactPageDisplay, btnSiguiente: histfactBtnSiguiente, btnUltima: histfactBtnUltima, paginationInfo: histfactPaginationInfo, limitSelect: histfactLimitSelect, paginationControls: histfactPaginationControls });
+                    } else { throw new Error(response.message || 'Error al cargar historial de facturas.'); }
+                } catch (error) { mostrarMensaje(mensajeGlobalContainer, `Error obteniendo historial de facturas: ${error.message}`, 'danger'); if(cuerpoTablaHistorialFacturas) cuerpoTablaHistorialFacturas.innerHTML = `<tr><td colspan="8" class="text-center p-3 text-danger">Error al cargar facturas.</td></tr>`; renderizarControlesPaginacion('histFact',0,0,0,histFacturasLimit, { btnPrimera: histfactBtnPrimera, btnAnterior: histfactBtnAnterior, pageDisplay: histfactPageDisplay, btnSiguiente: histfactBtnSiguiente, btnUltima: histfactBtnUltima, paginationInfo: histfactPaginationInfo, limitSelect: histfactLimitSelect, paginationControls: histfactPaginationControls });}
+            };
+            const aplicarFiltrosHistorialFact = () => { 
+                histFacturasFiltrosActuales.texto = filtroFacturasTexto ? filtroFacturasTexto.value : ''; 
+                histFacturasFiltrosActuales.fechaInicio = filtroFacturasFechaInicio ? filtroFacturasFechaInicio.value : ''; 
+                histFacturasFiltrosActuales.fechaFin = filtroFacturasFechaFin ? filtroFacturasFechaFin.value : ''; 
+                histFacturasFiltrosActuales.ver_anuladas = filtroFacturasVerAnuladas ? filtroFacturasVerAnuladas.checked : false;
+                histFacturasCurrentPage = 1; 
+                cargarYRenderizarHistorialFacturas(); 
+            };
+
+            const solicitarConfirmacionAccion = (tipo, id, msg, cb) => { if (currentUserRole !== 'Administrador' && tipo !== 'ClienteToggleActivo') { if (!(tipo === 'ClienteToggleActivo' && currentUserRole === 'Administrador')) { mostrarMensaje(mensajeGlobalContainer, 'No tiene permisos.', 'warning'); return; } } if (!confirmDeleteModal || !confirmDeleteMessage || !confirmDeleteBtn) { if (confirm(msg)) { if (cb) cb(); } else { mostrarMensaje(mensajeGlobalContainer, "Acción cancelada.", "info"); } return; } confirmDeleteMessage.textContent = msg; deleteCallback = cb; const newBtn = confirmDeleteBtn.cloneNode(true); if (confirmDeleteBtn.parentNode) { confirmDeleteBtn.parentNode.replaceChild(newBtn, confirmDeleteBtn); confirmDeleteBtn = newBtn; } confirmDeleteBtn.onclick = () => { confirmDeleteModal.hide(); if (deleteCallback) { deleteCallback(); deleteCallback = null; } }; confirmDeleteModal.show(); };
+            const agregarProducto = async (e) => { e.preventDefault(); if (currentUserRole !== 'Administrador') { mostrarMensaje(mensajeProducto, 'No tiene permisos.', 'warning'); return; } const producto = { departamento: inputDepto.value.trim(), descripcion: inputDesc.value.trim(), medida: selectMedida.value }; if (!producto.departamento || !producto.descripcion || !producto.medida) { mostrarMensaje(mensajeProducto, 'Campos obligatorios.', 'warning'); return; } try { const nuevoProd = await guardarProductoAPI(producto); mostrarMensaje(mensajeProducto, `Producto [${String(nuevoProd.codigo || 0).padStart(3,'0')}] "${producto.descripcion}" guardado.`, 'success'); formNuevoProducto.reset(); await inicializarAplicacion(currentUserRole, false); } catch (error) { mostrarMensaje(mensajeProducto, error.message || 'Error al guardar producto.', 'danger'); } };
+            const eliminarProducto = (id) => { 
+                const productoParaEliminar = listaProductosGlobal.find(p => p.id === id); 
+                const desc = productoParaEliminar ? `"${productoParaEliminar.descripcion}" (Cód: ${String(productoParaEliminar.codigo || 0).padStart(3,'0')})` : `ID ${id}`; 
+                solicitarConfirmacionAccion( 'Producto', id, `ELIMINAR Producto ${desc}?\n(Fallará si tiene movimientos/facturas).`, async () => { try { const result = await eliminarProductoAPI(id); mostrarMensaje(mensajeGlobalContainer, result.message || `Producto ID ${id} eliminado.`, 'success'); await inicializarAplicacion(currentUserRole, false); } catch (error) { mostrarMensaje(mensajeGlobalContainer, error.message || 'Error al eliminar producto.', 'danger'); } }); };
+            const actualizarCamposMovimiento = () => { if(!selectMovTipo || !precioContainer || !inputMovPrecio || !proveedorContainer || !inputMovProveedor || !clienteContainer || !inputMovCliente) return; const tipo = selectMovTipo.value; const esEntrada = tipo === 'entrada'; precioContainer.style.display = esEntrada ? 'block' : 'none'; inputMovPrecio.required = esEntrada; proveedorContainer.style.display = esEntrada ? 'block' : 'none'; inputMovProveedor.required = false; clienteContainer.style.display = !esEntrada ? 'block' : 'none'; inputMovCliente.required = false; if (!esEntrada) { inputMovPrecio.value = ''; inputMovProveedor.value = ''; } else { inputMovCliente.value = ''; } };
+            const agregarMovimiento = async (e) => { e.preventDefault(); const productoIdSeleccionado = hiddenMovProductoId.value; const cantidadValor = inputMovCantidad.value.replace(',', '.'); const precioValor = inputMovPrecio.value.replace(',', '.'); const productoSeleccionado = listaProductosGlobal.find(p => p.id == productoIdSeleccionado); const descProd = productoSeleccionado ? `"${productoSeleccionado.descripcion}"` : 'seleccionado'; if (!productoIdSeleccionado) { mostrarMensaje(mensajeMovimiento, 'Seleccione producto.', 'warning'); inputMovProducto.focus(); return; } if (!selectMovTipo.value || !cantidadValor || isNaN(cantidadValor) || Number(cantidadValor) <= 0 || !inputMovFecha.value) { mostrarMensaje(mensajeMovimiento, 'Complete campos (Producto, Tipo, Cantidad > 0, Fecha).', 'warning'); return; } if (selectMovTipo.value === 'entrada' && (precioValor === '' || isNaN(precioValor) || Number(precioValor) < 0)) { mostrarMensaje(mensajeMovimiento, 'Precio inválido para entrada.', 'warning'); inputMovPrecio.focus(); return; } const movimiento = { productoId: parseInt(productoIdSeleccionado, 10), tipo: selectMovTipo.value, cantidad: parseFloat(cantidadValor), fecha: inputMovFecha.value, precio: selectMovTipo.value === 'entrada' ? parseFloat(precioValor) : null, proveedor: selectMovTipo.value === 'entrada' ? inputMovProveedor.value.trim() : null, cliente: selectMovTipo.value === 'salida' ? inputMovCliente.value.trim() : null }; if (movimiento.tipo === 'entrada') delete movimiento.cliente; else { delete movimiento.precio; delete movimiento.proveedor; } try { const result = await guardarMovimientoAPI(movimiento); mostrarMensaje(mensajeMovimiento, `Movimiento (${movimiento.tipo}) de ${movimiento.cantidad} para ${descProd} registrado.`, 'success'); formMovimiento.reset(); hiddenMovProductoId.value = ''; inputMovProducto.value = ''; if(inputMovFecha) inputMovFecha.valueAsDate = new Date(); actualizarCamposMovimiento(); await inicializarAplicacion(currentUserRole, false); } catch (error) { mostrarMensaje(mensajeMovimiento, error.message || 'Error al guardar movimiento.', 'danger'); } };
+            const eliminarMovimiento = (id) => { solicitarConfirmacionAccion( 'Movimiento MANUAL', id, `ELIMINAR movimiento MANUAL ID ${id}?\n(No podrá eliminar movimientos de facturas).`, async () => { try { const result = await eliminarMovimientoAPI(id); mostrarMensaje(mensajeGlobalContainer, result.message || `Movimiento ID ${id} eliminado.`, 'success'); await inicializarAplicacion(currentUserRole, false); } catch (error) { mostrarMensaje(mensajeGlobalContainer, error.message || 'Error al eliminar movimiento.', 'danger'); } }); };
+            const calcularTotalFactura = () => { let total = 0; if(cuerpoTablaFacturaItems){ cuerpoTablaFacturaItems.querySelectorAll('tr').forEach(fila => { const subtotalEl = fila.querySelector('.subtotal'); if (subtotalEl) { total += parseFloat(subtotalEl.dataset.valor || 0); } }); } if(facturaTotalDisplay) facturaTotalDisplay.textContent = `Total Factura: ${formatCurrency(total)}`; return total; };
+            const actualizarSubtotalFilaFactura = (fila) => { const cantInput = fila.querySelector('.factura-item-cantidad'); const precioInput = fila.querySelector('.factura-item-precio'); const subtotalTd = fila.querySelector('.subtotal'); if(!cantInput || !precioInput || !subtotalTd) return; const cantidad = parseFloat(cantInput.value) || 0; const precio = parseFloat(precioInput.value) || 0; const subtotal = cantidad * precio; subtotalTd.textContent = formatNumber(subtotal, 2); subtotalTd.dataset.valor = subtotal; calcularTotalFactura(); };
+            const agregarFilaFactura = () => { if(!cuerpoTablaFacturaItems || !btnAddFacturaItem || !datalistProductos) return; const rowCount = cuerpoTablaFacturaItems.rows.length; if (rowCount >= MAX_ITEMS_FACTURA) { mostrarMensaje(mensajeFactura, `Máximo ${MAX_ITEMS_FACTURA} ítems.`, 'warning'); return; } const newRow = cuerpoTablaFacturaItems.insertRow(); newRow.innerHTML = `<td><input type="text" list="productos-lista" class="form-control form-control-sm factura-producto-input" placeholder="[Cod] Buscar..." required autocomplete="off"><input type="hidden" class="factura-producto-id"></td><td><input type="number" class="form-control form-control-sm factura-item-cantidad num" min="0.01" step="any" required value="1"></td><td><input type="number" class="form-control form-control-sm factura-item-precio num" min="0" step="0.01" required placeholder="0.00"></td><td class="subtotal num" data-valor="0">0.00</td><td class="text-center"><button type="button" class="btn btn-danger btn-sm btn-eliminar-fila-factura" title="Quitar"><i class="fas fa-times"></i></button></td>`; const productoInput = newRow.querySelector('.factura-producto-input'); const productoIdHidden = newRow.querySelector('.factura-producto-id'); const cantidadInput = newRow.querySelector('.factura-item-cantidad'); const precioInput = newRow.querySelector('.factura-item-precio'); const deleteButton = newRow.querySelector('.btn-eliminar-fila-factura'); const handleProductSelection = () => { productoIdHidden.value = ''; precioInput.value = ''; productoInput.title = ''; const textoBusqueda = productoInput.value; const selectedOption = Array.from(datalistProductos.options).find(o => o.value === textoBusqueda); if (selectedOption && selectedOption.dataset.id) { productoIdHidden.value = selectedOption.dataset.id; if(selectedOption.dataset.precio && selectedOption.dataset.precio !== '') { precioInput.value = parseFloat(selectedOption.dataset.precio).toFixed(2); } productoInput.title = `Unidad: ${selectedOption.dataset.medida || 'N/A'}`; } actualizarSubtotalFilaFactura(newRow); }; if(productoInput) { productoInput.addEventListener('input', handleProductSelection); productoInput.addEventListener('change', handleProductSelection); productoInput.focus(); } if(cantidadInput) cantidadInput.addEventListener('input', () => actualizarSubtotalFilaFactura(newRow)); if(precioInput) precioInput.addEventListener('input', () => actualizarSubtotalFilaFactura(newRow)); if(deleteButton) deleteButton.addEventListener('click', () => { newRow.remove(); calcularTotalFactura(); }); calcularTotalFactura(); };
+            const guardarFactura = async () => { if(!facturaFecha || !inputFacturaCliente || !hiddenFacturaClienteId || !cuerpoTablaFacturaItems || !btnGuardarFactura || !selectFacturaCondicionPago || !inputFacturaFechaVencimiento) return; const clienteIdSeleccionado = hiddenFacturaClienteId.value; if (!facturaFecha.value) { mostrarMensaje(mensajeFactura, "Fecha requerida.", "warning"); facturaFecha.focus(); return; } if (!clienteIdSeleccionado) { mostrarMensaje(mensajeFactura, "Seleccione un cliente válido de la lista.", "warning"); if (inputFacturaCliente) inputFacturaCliente.focus(); return; } const condicionPago = selectFacturaCondicionPago.value; let fechaVencimiento = null; if (condicionPago === 'credito') { if (!inputFacturaFechaVencimiento.value) { mostrarMensaje(mensajeFactura, "Fecha de vencimiento requerida para crédito.", "warning"); inputFacturaFechaVencimiento.focus(); return; } const fechaFacturaObj = new Date(facturaFecha.value + "T00:00:00Z"); const fechaVencimientoObj = new Date(inputFacturaFechaVencimiento.value + "T00:00:00Z"); if (fechaVencimientoObj < fechaFacturaObj) { mostrarMensaje(mensajeFactura, "Fecha de vencimiento no puede ser anterior a fecha de factura.", "warning"); inputFacturaFechaVencimiento.focus(); return; } fechaVencimiento = inputFacturaFechaVencimiento.value; } const factura = { fecha: facturaFecha.value, clienteId: parseInt(clienteIdSeleccionado, 10), condicion_pago: condicionPago, fecha_vencimiento: fechaVencimiento, items: [] }; const filasItems = cuerpoTablaFacturaItems.querySelectorAll('tr'); if (filasItems.length === 0) { mostrarMensaje(mensajeFactura, "Añada ítems.", "warning"); return; } let itemsValidos = true; let focusElement = null; filasItems.forEach((fila) => { const productoInput = fila.querySelector('.factura-producto-input'); const productoIdHidden = fila.querySelector('.factura-producto-id'); const cantidadInput = fila.querySelector('.factura-item-cantidad'); const precioInput = fila.querySelector('.factura-item-precio'); if (!productoInput || !productoIdHidden || !cantidadInput || !precioInput) { itemsValidos = false; return; } const productoId = productoIdHidden.value; const cantidad = cantidadInput.value; const precio = precioInput.value; [productoInput, cantidadInput, precioInput].forEach(el => el.classList.remove('is-invalid')); let errorEnFila = false; if (!productoId) { productoInput.classList.add('is-invalid'); if (!focusElement) focusElement = productoInput; errorEnFila = true; } if (!cantidad || isNaN(cantidad) || Number(cantidad) <= 0) { cantidadInput.classList.add('is-invalid'); if (!focusElement) focusElement = cantidadInput; errorEnFila = true; } if (precio === '' || isNaN(precio) || Number(precio) < 0) { precioInput.classList.add('is-invalid'); if (!focusElement) focusElement = precioInput; errorEnFila = true; } if (!errorEnFila) { factura.items.push({ productoId: parseInt(productoId, 10), cantidad: parseFloat(cantidad), precio: parseFloat(precio) }); } else { itemsValidos = false; } }); if (!itemsValidos) { mostrarMensaje(mensajeFactura, "Revise ítems marcados.", "warning", 6000); if (focusElement) focusElement.focus(); return; } btnGuardarFactura.disabled = true; btnGuardarFactura.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Guardando...`; try { const result = await guardarFacturaAPI(factura); mostrarMensaje(mensajeFactura, result.message || `Factura ID ${result.data.id || '?'} guardada.`, 'success'); if(inputFacturaCliente) inputFacturaCliente.value = ""; if(hiddenFacturaClienteId) hiddenFacturaClienteId.value = ""; if(selectFacturaCondicionPago) {selectFacturaCondicionPago.value = "contado"; if (facturaFechaVencimientoContainer) facturaFechaVencimientoContainer.style.display = 'none'; if(inputFacturaFechaVencimiento) inputFacturaFechaVencimiento.value = '';} if(facturaFecha) facturaFecha.valueAsDate = new Date(); if(cuerpoTablaFacturaItems) cuerpoTablaFacturaItems.innerHTML = ''; calcularTotalFactura(); agregarFilaFactura(); await inicializarAplicacion(currentUserRole, false); } catch (error) { mostrarMensaje(mensajeFactura, error.message || 'Error al guardar factura.', 'danger'); } finally { btnGuardarFactura.disabled = false; btnGuardarFactura.innerHTML = '<i class="fas fa-save"></i> Guardar Factura'; } };
+            const verFactura = async (facturaId) => { if (!printableArea) return; mostrarMensaje(mensajeGlobalContainer, `Cargando factura ${facturaId}...`, 'info', 2000); try { const fact = await cargarFacturaDetalleAPI(facturaId); let itemsHtml = ''; if (fact.items && fact.items.length > 0) { fact.items.forEach(it => { const cP = String(it.producto_codigo || 0).padStart(3, '0'); const desc = it.producto_descripcion || '?'; const med = it.producto_medida || ''; const d = `[${cP}] ${desc}`; const cant = `${formatNumber(it.cantidad, 2)} ${med}`; const precio = formatCurrency(it.precio_venta); const sub = formatCurrency(it.subtotal); itemsHtml += `<tr><td>${d}</td><td class="num">${cant}</td><td class="num">${precio}</td><td class="num">${sub}</td></tr>`; }); } else { itemsHtml = '<tr><td colspan="4" class="text-center">No hay ítems.</td></tr>'; } let fechaFmt = 'Inv.'; try { if (fact.fecha) { const date = new Date(fact.fecha + 'T00:00:00Z'); fechaFmt = date.toLocaleDateString('es-ES', { timeZone:'UTC', day: '2-digit', month: '2-digit', year: 'numeric' }); } } catch(e) {} const totalFmt = formatCurrency(fact.total); const clienteParaImprimir = fact.cliente_nombre || (fact.cliente || '-'); let printHtml = `<div style="max-width: 800px; margin: auto;" id="print-content-wrapper"><h2>Factura N°: ${fact.id}</h2><p><strong>Fecha:</strong> ${fechaFmt}</p><p><strong>Cliente:</strong> ${clienteParaImprimir}</p>`; if(fact.condicion_pago === 'credito' && fact.fecha_vencimiento) { const fechaVencFmt = new Date(fact.fecha_vencimiento + 'T00:00:00Z').toLocaleDateString('es-ES',{timeZone:'UTC'}); printHtml += `<p><strong>Condición:</strong> Crédito | <strong>Vence:</strong> ${fechaVencFmt}</p>`; } else { printHtml += `<p><strong>Condición:</strong> Contado</p>`; } if(fact.anulada) { printHtml += `<p class="text-danger fw-bold">FACTURA ANULADA</p><p><strong>Fecha Anulación:</strong> ${fact.fecha_anulacion ? new Date(fact.fecha_anulacion).toLocaleString('es-ES') : 'N/A'}</p><p><strong>Motivo:</strong> ${fact.motivo_anulacion || 'N/A'}</p><p><strong>Anulada por:</strong> ${fact.usuario_anulacion_nombre || 'N/A'}</p>`; printableArea.classList.add('anulada-print-version'); } else { printableArea.classList.remove('anulada-print-version'); } printHtml += `<hr style="border-top: 1px solid #ccc; margin: 15px 0;"><h3>Detalle</h3><table><thead><tr><th>Producto</th><th class="num">Cantidad</th><th class="num">Precio U.</th><th class="num">Subtotal</th></tr></thead><tbody>${itemsHtml}</tbody></table><div id="print-total">Total General: ${totalFmt}</div>`; if(fact.condicion_pago === 'credito' && !fact.anulada) { printHtml += `<p style="text-align:right;font-size:10pt;">Saldo Pendiente: ${formatCurrency(fact.saldo_pendiente)}</p>`;} printHtml += `<p style="text-align:center;margin-top:40px;font-size:9pt;color:#777;" class="no-print">--- Documento No Fiscal ---</p></div>`; printableArea.innerHTML = printHtml; printableArea.style.display = 'block'; setTimeout(() => { try { window.print(); } catch (err) { mostrarMensaje(mensajeGlobalContainer, "Error al imprimir.", "danger"); } finally { setTimeout(() => { printableArea.style.display = 'none'; printableArea.innerHTML = ''; }, 500); } }, 300); } catch (error) { mostrarMensaje(mensajeGlobalContainer, error.message || `Error al cargar factura ${facturaId}.`, 'danger'); printableArea.style.display = 'none'; printableArea.innerHTML = ''; } };
+            const abrirModalAnulacion = (facturaId) => {
+                if (!motivoAnulacionModal || !displayAnularFacturaId || !inputAnularFacturaId || !textareaMotivoAnulacion || !mensajeMotivoAnulacionModal) return;
+                displayAnularFacturaId.textContent = facturaId;
+                inputAnularFacturaId.value = facturaId;
+                textareaMotivoAnulacion.value = '';
+                mensajeMotivoAnulacionModal.innerHTML = '';
+                motivoAnulacionModal.show();
+                textareaMotivoAnulacion.focus();
+            };
+            const confirmarAnulacionFactura = async () => {
+                if (!inputAnularFacturaId || !textareaMotivoAnulacion || !mensajeMotivoAnulacionModal) return;
+                const facturaId = inputAnularFacturaId.value;
+                const motivo = textareaMotivoAnulacion.value.trim();
+                if (!motivo) { mostrarMensaje(mensajeMotivoAnulacionModal, 'El motivo de anulación es obligatorio.', 'warning'); textareaMotivoAnulacion.focus(); return; }
+                if (btnConfirmarAnulacion) { btnConfirmarAnulacion.disabled = true; btnConfirmarAnulacion.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Anulando...`; }
+                try {
+                    const result = await anularFacturaAPI(facturaId, motivo);
+                    mostrarMensaje(mensajeGlobalContainer, result.message || `Factura ID ${facturaId} anulada.`, 'success');
+                    motivoAnulacionModal.hide();
+                    await inicializarAplicacion(currentUserRole, false); 
+                } catch (error) {
+                    mostrarMensaje(mensajeMotivoAnulacionModal, error.message || 'Error al anular factura.', 'danger');
+                } finally {
+                    if (btnConfirmarAnulacion) { btnConfirmarAnulacion.disabled = false; btnConfirmarAnulacion.innerHTML = '<i class="fas fa-check"></i> Confirmar Anulación'; }
+                }
+            };
+            const limpiarFormularioCliente = () => { if (!formCliente) return; formCliente.reset(); if(inputClienteIdEdit) inputClienteIdEdit.value = ''; if(clienteFormTitle) clienteFormTitle.textContent = 'Agregar Nuevo Cliente'; if(btnCancelarClienteEdicion) btnCancelarClienteEdicion.style.display = 'none'; if(inputClienteActivo) inputClienteActivo.checked = true; if(mensajeCliente) mensajeCliente.innerHTML = ''; };
+            const cargarDatosClienteEnFormulario = (clienteId) => { const cliente = listaClientesGlobal.find(c => c.id === clienteId); if (cliente && formCliente) { if(inputClienteIdEdit) inputClienteIdEdit.value = cliente.id; if(inputClienteNombre) inputClienteNombre.value = cliente.nombre_razon_social; if(inputClienteCodigoAlfanumerico) inputClienteCodigoAlfanumerico.value = cliente.codigo_alfanumerico || ''; if(inputClienteIdentificacion) inputClienteIdentificacion.value = cliente.identificacion_fiscal || ''; if(inputClienteTelefono) inputClienteTelefono.value = cliente.telefono || ''; if(inputClienteDireccion) inputClienteDireccion.value = cliente.direccion || ''; if(inputClienteEmail) inputClienteEmail.value = cliente.email || ''; if(inputClienteActivo) inputClienteActivo.checked = cliente.activo; if(clienteFormTitle) clienteFormTitle.textContent = 'Editar Cliente (ID: ' + cliente.id + ')'; if(btnCancelarClienteEdicion) btnCancelarClienteEdicion.style.display = 'inline-block'; if(inputClienteNombre) inputClienteNombre.focus(); const clienteFormCard = formCliente.closest('.card'); if (clienteFormCard) clienteFormCard.scrollIntoView({ behavior: 'smooth' }); } else { mostrarMensaje(mensajeCliente, 'Cliente no encontrado.', 'warning'); } };
+            const guardarOActualizarCliente = async (e) => { e.preventDefault(); if (currentUserRole !== 'Administrador') { mostrarMensaje(mensajeCliente, 'No tiene permisos.', 'warning'); return; } if(!inputClienteNombre || !inputClienteCodigoAlfanumerico || !inputClienteIdentificacion || !inputClienteTelefono || !inputClienteDireccion || !inputClienteEmail || !inputClienteActivo) return; const nombre = inputClienteNombre.value.trim(); if (!nombre) { mostrarMensaje(mensajeCliente, 'Nombre obligatorio.', 'warning'); inputClienteNombre.focus(); return; } const clienteData = { nombre_razon_social: nombre, codigo_cliente_alfanumerico: inputClienteCodigoAlfanumerico.value.trim() || null, identificacion_fiscal: inputClienteIdentificacion.value.trim() || null, telefono: inputClienteTelefono.value.trim() || null, direccion: inputClienteDireccion.value.trim() || null, email: inputClienteEmail.value.trim() || null, activo: inputClienteActivo.checked }; const clienteId = inputClienteIdEdit.value; try { let result; if (clienteId) { result = await actualizarClienteAPI(parseInt(clienteId), clienteData); }  else { result = await guardarClienteAPI(clienteData); } mostrarMensaje(mensajeCliente, result.message || 'Cliente procesado.', 'success'); limpiarFormularioCliente(); await inicializarAplicacion(currentUserRole, false); } catch (error) { mostrarMensaje(mensajeCliente, error.message || 'Error al procesar cliente.', 'danger'); } };
+            const toggleActivoCliente = (clienteId) => { if (currentUserRole !== 'Administrador') { mostrarMensaje(mensajeGlobalContainer, 'No tiene permisos.', 'warning'); return; } const cliente = listaClientesGlobal.find(c => c.id === clienteId); if (!cliente) { mostrarMensaje(mensajeGlobalContainer, 'Cliente no encontrado.', 'danger'); return; } const accion = cliente.activo ? 'desactivar' : 'activar'; solicitarConfirmacionAccion('ClienteToggleActivo', clienteId, `¿${accion.toUpperCase()} cliente "${cliente.nombre_razon_social}" (ID: ${cliente.id})?`, async () => { try { const result = await toggleActivoClienteAPI(clienteId); mostrarMensaje(mensajeGlobalContainer, result.message || `Cliente ${accion}do.`, 'success'); inicializarAplicacion(currentUserRole, false); } catch (error) { mostrarMensaje(mensajeGlobalContainer, error.message || `Error al ${accion} cliente.`, 'danger'); } }); };
+            const cargarYRenderizarCXC = async () => { if (!selectFiltroCXCCliente || !selectFiltroCXCEstado || !inputFiltroCXCFacturaId || !cuerpoTablaCXC) return; const params = {}; if (selectFiltroCXCCliente.value) params.cliente_id = selectFiltroCXCCliente.value; if (inputFiltroCXCFacturaId.value) params.factura_id_en_cxc_lista = inputFiltroCXCFacturaId.value; if (selectFiltroCXCEstado.value === 'vencida') { params.estado_vencimiento = 'vencida'; } else if (selectFiltroCXCEstado.value && selectFiltroCXCEstado.value !== "") { params.estado_pago_filtro = selectFiltroCXCEstado.value;} cuerpoTablaCXC.innerHTML = `<tr><td colspan="9" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div> Cargando...</td></tr>`; try { const facturasPendientes = await cargarCXCAPI(params); renderizarTablaCXC(facturasPendientes); } catch (error) { mostrarMensaje(mensajeGlobalContainer, 'Error al cargar CXC.', 'danger'); if (cuerpoTablaCXC) cuerpoTablaCXC.innerHTML = `<tr><td colspan="9" class="text-center p-3 text-danger fw-bold">Error al cargar.</td></tr>`; } };
+            const abrirModalPago = (facturaId, clienteId, clienteNombre, saldoActual) => { if (!formRegistrarPago || !inputPagoFacturaId || !displayPagoModalFacturaId || !displayPagoModalClienteNombre || !displayPagoModalSaldoActual || !inputPagoMonto || !inputPagoFecha || !mensajePagoModal || !registrarPagoModal) return; formRegistrarPago.reset(); inputPagoFacturaId.value = facturaId; displayPagoModalFacturaId.textContent = facturaId; displayPagoModalClienteNombre.textContent = clienteNombre || 'N/A'; displayPagoModalSaldoActual.textContent = formatCurrency(saldoActual); inputPagoMonto.max = saldoActual; inputPagoMonto.value = saldoActual > 0 ? saldoActual.toFixed(2) : ''; inputPagoFecha.valueAsDate = new Date(); mensajePagoModal.innerHTML = ''; registrarPagoModal.show(); };
+            const confirmarRegistroPago = async () => { if (!formRegistrarPago || !inputPagoFacturaId || !inputPagoMonto || !inputPagoFecha) return; const facturaId = inputPagoFacturaId.value; const monto = parseFloat(inputPagoMonto.value); const fecha = inputPagoFecha.value; const saldoActualText = displayPagoModalSaldoActual.textContent; const saldoActualNum = parseFloat(saldoActualText.replace(/[^\d.-]/g, '')) || 0; if (isNaN(monto) || monto <= 0) { mostrarMensaje(mensajePagoModal, 'Monto debe ser > 0.', 'warning'); inputPagoMonto.focus(); return; } if (!fecha) { mostrarMensaje(mensajePagoModal, 'Fecha de pago requerida.', 'warning'); inputPagoFecha.focus(); return; } if (monto > saldoActualNum) { mostrarMensaje(mensajePagoModal, `Monto (${formatCurrency(monto)}) excede saldo (${formatCurrency(saldoActualNum)}).`, 'warning'); inputPagoMonto.focus(); return; } const pagoData = { factura_id: parseInt(facturaId), monto_pagado: monto, fecha_pago: fecha, metodo_pago: selectPagoMetodo ? selectPagoMetodo.value : null, referencia_pago: inputPagoReferencia ? inputPagoReferencia.value.trim() : null, observaciones: textareaPagoObservaciones ? textareaPagoObservaciones.value.trim() : null }; try { const result = await registrarPagoAPI(pagoData); mostrarMensaje(mensajeGlobalContainer, result.message || 'Pago registrado.', 'success'); registrarPagoModal.hide(); await cargarYRenderizarCXC(); await cargarYRenderizarHistorialFacturas(); } catch (error) { mostrarMensaje(mensajePagoModal, error.message || 'Error al registrar pago.', 'danger'); } };
+            const abrirModalHistorialPagos = async (facturaId, clienteNombre, totalFactura, saldoPendiente) => { if (!historialPagosModal || !displayHistorialPagosFacturaId || !displayHistorialPagosClienteNombre || !displayHistorialPagosTotalFactura || !displayHistorialPagosSaldoPendiente || !cuerpoTablaHistorialPagos || !mensajeHistorialPagosModal || !historialPagosLoading) return; displayHistorialPagosFacturaId.textContent = facturaId; displayHistorialPagosClienteNombre.textContent = clienteNombre || 'N/A'; displayHistorialPagosTotalFactura.textContent = formatCurrency(totalFactura); displayHistorialPagosSaldoPendiente.textContent = formatCurrency(saldoPendiente); cuerpoTablaHistorialPagos.innerHTML = ''; mensajeHistorialPagosModal.innerHTML = ''; historialPagosLoading.style.display = 'block'; historialPagosModal.show(); try { const pagos = await cargarHistorialPagosFacturaAPI(facturaId); renderizarTablaHistorialPagos(pagos); } catch (error) { mostrarMensaje(mensajeHistorialPagosModal, 'Error al cargar historial de pagos.', 'danger'); } finally { historialPagosLoading.style.display = 'none'; } };
+
+            const inicializarAplicacion = async (rol, mostrarMensajeCarga = true) => {
+                currentUserRole = rol; sessionStorage.setItem('currentUserRole', rol); actualizarUIPorRol(rol); 
+                if (mostrarMensajeCarga) mostrarMensaje(mensajeGlobalContainer, 'Cargando datos...', 'info', 2000); 
+                if (resumenLoadingPlaceholder) resumenLoadingPlaceholder.style.display = 'flex'; 
+                if (cuerpoTablaClientes) cuerpoTablaClientes.innerHTML = `<tr><td colspan="9" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div>Cargando...</td></tr>`;
+                if (cuerpoTablaCXC) cuerpoTablaCXC.innerHTML = `<tr><td colspan="9" class="text-center p-3"><div class="spinner-border spinner-border-sm"></div>Cargando...</td></tr>`; 
+                try { 
+                    if (mostrarMensajeCarga) { 
+                        if (formNuevoProducto) formNuevoProducto.reset(); 
+                        if (formCliente) limpiarFormularioCliente(); 
+                        if (formMovimiento) { formMovimiento.reset(); hiddenMovProductoId.value = ''; inputMovProducto.value = ''; } 
+                        if (facturaFecha) facturaFecha.valueAsDate = new Date(); 
+                        if (inputFacturaCliente) inputFacturaCliente.value = ""; if(hiddenFacturaClienteId) hiddenFacturaClienteId.value = "";
+                        if(selectFacturaCondicionPago) {selectFacturaCondicionPago.value = "contado"; if (facturaFechaVencimientoContainer) facturaFechaVencimientoContainer.style.display = 'none'; if(inputFacturaFechaVencimiento) inputFacturaFechaVencimiento.value = '';} 
+                        if (inputMovFecha) inputMovFecha.valueAsDate = new Date(); 
+                        actualizarCamposMovimiento(); 
+                        if (cuerpoTablaFacturaItems) cuerpoTablaFacturaItems.innerHTML = ''; 
+                        calcularTotalFactura(); 
+                        agregarFilaFactura(); 
+                    } 
+                    const [productosParaDatalistResponse, clientesActivos, todosLosClientesResponse] = await Promise.all([
+                        fetchData('productos.php?todos=1'), 
+                        cargarClientesAPI(true),
+                        fetchData('clientes.php') 
+                    ]).catch(loadError => {
+                        mostrarMensaje(mensajeGlobalContainer, `Error crítico al cargar datos iniciales: ${loadError.message}.`, 'danger', 10000);
+                        throw loadError;
+                    });
+                    
+                    popularDatalistProductos( (productosParaDatalistResponse && productosParaDatalistResponse.data) ? productosParaDatalistResponse.data : [] );
+                    listaClientesGlobal = (todosLosClientesResponse && todosLosClientesResponse.data) ? todosLosClientesResponse.data : [];
+                
+                    renderizarTablaClientes(listaClientesGlobal); 
+                    popularDatalistClientesFactura(clientesActivos); 
+                    popularFiltroClientesCXC(clientesActivos); 
+                    await renderizarResumen(); 
+                    await cargarYRenderizarInventario(); 
+                    await cargarYRenderizarHistorialMovimientos(); 
+                    await cargarYRenderizarHistorialFacturas(); 
+                    if (mostrarMensajeCarga) mostrarMensaje(mensajeGlobalContainer, 'Datos cargados.', 'success', 1500); 
+                } catch (initError) { 
+                    console.error("Fallo en inicializarAplicacion:", initError); 
+                } finally { 
+                    if (resumenLoadingPlaceholder) resumenLoadingPlaceholder.style.display = 'none'; 
+                } 
+            };
+            const mostrarMensajeLogin = (txt, tipo = 'danger') => { if(!loginMessage) return; loginMessage.innerHTML = `<div class="alert alert-${tipo} mt-3">${txt}</div>`; loginMessage.style.display = 'block'; };
+            const handleLogout = async () => { try { await fetchData('logout.php', { method: 'POST' }); mostrarMensajeLogin('Cierre de sesión exitoso.', 'success'); currentUserRole = null; sessionStorage.removeItem('currentUserRole'); if (appContainer) appContainer.style.display = 'none'; if (loginContainer) loginContainer.style.display = 'block'; if (loginForm) loginForm.reset(); } catch (error) { mostrarMensajeLogin('Error al cerrar sesión: ' + error.message, 'danger'); } };
+            const actualizarUIPorRol = (rol) => { currentUserRole = rol; const esAdmin = rol === 'Administrador'; const esSoloLectura = rol === 'Solo Lectura'; const puedeCrearFactura = esAdmin || (!esAdmin && !esSoloLectura); const puedeRegistrarPagos = esAdmin || currentUserRole === 'Cajero'; document.querySelectorAll('#tab-carga, #tab-movimiento, #tab-datos').forEach(tab => { if(tab) tab.style.display = esAdmin ? '' : 'none'; }); if(formNuevoProducto) formNuevoProducto.querySelectorAll('input,select,button').forEach(el=>el.disabled = !esAdmin); if(formCliente) formCliente.querySelectorAll('input,select,button,textarea').forEach(el=>el.disabled = !esAdmin); if(formMovimiento) formMovimiento.querySelectorAll('input,select,button').forEach(el=>el.disabled = !esAdmin); if(document.getElementById('tab-factura')) document.getElementById('tab-factura').style.display = puedeCrearFactura ? '' : 'none'; if(formFactura) formFactura.querySelectorAll('input,select').forEach(el=>el.disabled = !puedeCrearFactura); if(btnAddFacturaItem) btnAddFacturaItem.disabled = !puedeCrearFactura; if(btnGuardarFactura) btnGuardarFactura.disabled = !puedeCrearFactura; if(cuerpoTablaFacturaItems) cuerpoTablaFacturaItems.querySelectorAll('input,button').forEach(el=>el.disabled = !puedeCrearFactura); if(tabCXCButton) tabCXCButton.style.display = (esAdmin || currentUserRole === 'Cajero' || !esSoloLectura) ? '' : 'none';  const activeTabButton = document.querySelector('#myTab .nav-link.active'); const activeTabId = activeTabButton ? activeTabButton.getAttribute('aria-controls') : null; let redirectToResumen = false; if (activeTabId === '#seccion-carga' && !esAdmin) redirectToResumen = true; if (activeTabId === '#seccion-movimiento' && !esAdmin) redirectToResumen = true; if (activeTabId === '#seccion-factura' && !puedeCrearFactura) redirectToResumen = true; if (activeTabId === '#seccion-cxc' && !(esAdmin || currentUserRole === 'Cajero' || !esSoloLectura)) redirectToResumen = true; if (activeTabId === '#seccion-datos' && !esAdmin) redirectToResumen = true; if (redirectToResumen) { const resumenTabButton = document.getElementById('tab-resumen'); if(resumenTabButton) { const tab = new bootstrap.Tab(resumenTabButton); tab.show(); } }};
+            if (loginForm) { loginForm.addEventListener('submit', async (e) => { e.preventDefault(); const usernameInput = document.getElementById('username'); const passwordInput = document.getElementById('password'); const username = usernameInput.value; const password = passwordInput.value; if (!username || !password) { mostrarMensajeLogin('Usuario y contraseña requeridos.'); return; } const submitButton = loginForm.querySelector('button[type="submit"]'); const originalButtonText = submitButton.innerHTML; submitButton.disabled = true; submitButton.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Verificando...`; loginMessage.style.display = 'none'; try { const response = await fetch(`${API_BASE_URL}/login.php`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) }); const data = await response.json(); if (data.success && data.data && data.data.role) { mostrarMensajeLogin('Login exitoso. Cargando...', 'success'); if (loginContainer) loginContainer.style.display = 'none'; if (appContainer) appContainer.style.display = 'block'; await inicializarAplicacion(data.data.role, true); } else { mostrarMensajeLogin(data.message || 'Credenciales incorrectas.'); if(passwordInput) passwordInput.value = ''; if(usernameInput) usernameInput.focus(); } } catch (error) { if (typeof API_BASE_URL === 'undefined') { mostrarMensajeLogin('Error: URL API no config.'); } else { mostrarMensajeLogin(`Error al conectar: ${error.message}`); } } finally { submitButton.disabled = false; submitButton.innerHTML = originalButtonText; } }); } else { document.body.innerHTML = '<div class="alert alert-danger m-5">Error: Formulario login no encontrado.</div>'; }
+            const updateThemeUI = (theme) => { document.documentElement.setAttribute('data-bs-theme', theme); if (themeIcon) { themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon'; } if (themeToggleBtn) { themeToggleBtn.classList.remove('btn-outline-light', 'btn-outline-dark'); themeToggleBtn.classList.add(theme === 'dark' ? 'btn-outline-light' : 'btn-outline-dark'); } }; const storedTheme = localStorage.getItem('theme'); const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light'); updateThemeUI(initialTheme); if (themeToggleBtn) { themeToggleBtn.addEventListener('click', () => { let currentTheme = document.documentElement.getAttribute('data-bs-theme'); let newTheme = currentTheme === 'dark' ? 'light' : 'dark'; localStorage.setItem('theme', newTheme); updateThemeUI(newTheme); }); }
+            const tabTriggerList = document.querySelectorAll('#myTab button[data-bs-toggle="tab"]'); tabTriggerList.forEach(tabTriggerEl => { tabTriggerEl.addEventListener('shown.bs.tab', event => { const activeTabId = event.target.dataset.bsTarget; if (!activeTabId) return; const activeContent = document.querySelector(activeTabId); if (!activeContent) return; const alertContainer = activeContent.querySelector('[id^="mensaje-"]'); if (alertContainer) { alertContainer.innerHTML = ''; alertContainer.style.display = 'none'; } if (activeTabId === '#seccion-clientes' && formCliente && (!inputClienteIdEdit || !inputClienteIdEdit.value)) { limpiarFormularioCliente(); inicializarAplicacion(currentUserRole, false); } if (activeTabId === '#seccion-cxc') { cargarYRenderizarCXC(); if (listaClientesGlobal.length > 0 && selectFiltroCXCCliente && selectFiltroCXCCliente.options.length <=1 ) { popularFiltroClientesCXC(listaClientesGlobal.filter(c => c.activo));}} if (activeTabId === '#seccion-historial') { historialMovimientosCurrentPage = 1; aplicarFiltrosHistorialMov(); } if (activeTabId === '#seccion-detalle-inventario') { inventarioCurrentPage = 1; aplicarFiltrosInventario(); } if (activeTabId === '#seccion-historial-facturas') { histFacturasCurrentPage = 1; aplicarFiltrosHistorialFact(); } }); });
+            if(logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+            if(formNuevoProducto) formNuevoProducto.addEventListener('submit', agregarProducto); if(formMovimiento) formMovimiento.addEventListener('submit', agregarMovimiento); if(selectMovTipo) selectMovTipo.addEventListener('change', actualizarCamposMovimiento); 
+            if (inputMovProducto && datalistProductos && hiddenMovProductoId) { const handleMovProductSelection = () => { hiddenMovProductoId.value = ''; const textoBusqueda = inputMovProducto.value; const selectedOption = Array.from(datalistProductos.options).find(o => o.value === textoBusqueda); if (selectedOption && selectedOption.dataset.id) { hiddenMovProductoId.value = selectedOption.dataset.id; } }; inputMovProducto.addEventListener('input', handleMovProductSelection); inputMovProducto.addEventListener('change', handleMovProductSelection); }
+            if (inputFacturaCliente && datalistFacturaClientes && hiddenFacturaClienteId) { const handleClienteFacturaSelection = () => { hiddenFacturaClienteId.value = ''; const textoBusqueda = inputFacturaCliente.value; const selectedOption = Array.from(datalistFacturaClientes.options).find(o => o.value === textoBusqueda); if (selectedOption && selectedOption.dataset.id) { hiddenFacturaClienteId.value = selectedOption.dataset.id; } }; inputFacturaCliente.addEventListener('input', handleClienteFacturaSelection); inputFacturaCliente.addEventListener('change', handleClienteFacturaSelection); }
+            if(cuerpoTablaInventario) { cuerpoTablaInventario.addEventListener('click', (e) => { const deleteButton = e.target.closest('.btn-eliminar-producto'); if (deleteButton && !deleteButton.disabled) { const id = deleteButton.dataset.id; if (id) eliminarProducto(parseInt(id, 10)); } }); } 
+            if(cuerpoTablaHistorial) { cuerpoTablaHistorial.addEventListener('click', (e) => { const deleteButton = e.target.closest('.btn-eliminar-movimiento'); const viewLink = e.target.closest('.link-ver-factura'); if (deleteButton && !deleteButton.disabled) { const id = deleteButton.dataset.id; if (id) eliminarMovimiento(parseInt(id, 10)); } else if (viewLink) { e.preventDefault(); const id = viewLink.dataset.id; if (id) verFactura(parseInt(id, 10)); } }); } 
+            if(btnAddFacturaItem) btnAddFacturaItem.addEventListener('click', agregarFilaFactura); 
+            if(btnGuardarFactura) btnGuardarFactura.addEventListener('click', guardarFactura); 
+            if(cuerpoTablaHistorialFacturas) {
+                cuerpoTablaHistorialFacturas.addEventListener('click', (e) => {
+                    const viewButton = e.target.closest('.btn-ver-factura');
+                    const anularButton = e.target.closest('.btn-anular-factura');
+                    const verAnuladaButton = e.target.closest('.btn-ver-factura-anulada');
+                    const historialPagosBtn = e.target.closest('.btn-ver-historial-pagos');
+
+                    if (viewButton) { const id = viewButton.dataset.id; if (id) verFactura(parseInt(id, 10)); } 
+                    else if (verAnuladaButton) { const id = verAnuladaButton.dataset.id; if (id) verFactura(parseInt(id, 10)); }
+                    else if (anularButton && !anularButton.disabled) { const id = anularButton.dataset.id; if (id) abrirModalAnulacion(parseInt(id, 10)); } 
+                    else if (historialPagosBtn) { const facturaId = historialPagosBtn.dataset.facturaId; const clienteNombre = historialPagosBtn.dataset.clienteNombre; const totalFactura = parseFloat(historialPagosBtn.dataset.totalFactura); const saldoPendiente = parseFloat(historialPagosBtn.dataset.saldoPendiente); abrirModalHistorialPagos(facturaId, clienteNombre, totalFactura, saldoPendiente); }
+                });
+            }
+            if(btnConfirmarAnulacion) btnConfirmarAnulacion.addEventListener('click', confirmarAnulacionFactura);
+            if (btnExportarDatos) btnExportarDatos.disabled = true; if (inputImportarDatos) inputImportarDatos.disabled = true; const importLabel = document.querySelector('label[for="input-importar-datos"]'); if (importLabel) { importLabel.style.opacity = 0.65; importLabel.style.cursor = 'not-allowed'; } if(mensajeDatos) mensajeDatos.innerHTML = '<div class="alert alert-info">Import/Export deshabilitado.</div>';
+            if(formCliente) formCliente.addEventListener('submit', guardarOActualizarCliente); if(btnCancelarClienteEdicion) btnCancelarClienteEdicion.addEventListener('click', limpiarFormularioCliente); if(cuerpoTablaClientes) { cuerpoTablaClientes.addEventListener('click', (e) => { const editarBtn = e.target.closest('.btn-editar-cliente'); const toggleActivoBtn = e.target.closest('.btn-toggle-activo-cliente'); if (editarBtn && !editarBtn.disabled) { const id = parseInt(editarBtn.dataset.id, 10); if (id) cargarDatosClienteEnFormulario(id); } else if (toggleActivoBtn && !toggleActivoBtn.disabled) { const id = parseInt(toggleActivoBtn.dataset.id, 10); if (id) toggleActivoCliente(id); } }); }
+            if(selectFacturaCondicionPago) { selectFacturaCondicionPago.addEventListener('change', () => { if (facturaFechaVencimientoContainer && inputFacturaFechaVencimiento) { if (selectFacturaCondicionPago.value === 'credito') { facturaFechaVencimientoContainer.style.display = 'block'; inputFacturaFechaVencimiento.required = true; } else { facturaFechaVencimientoContainer.style.display = 'none'; inputFacturaFechaVencimiento.required = false; inputFacturaFechaVencimiento.value = ''; } } }); }
+            if (btnAplicarFiltroCXC) btnAplicarFiltroCXC.addEventListener('click', cargarYRenderizarCXC); if (limpiarFiltroCXCBtn) limpiarFiltroCXCBtn.addEventListener('click', () => { if(selectFiltroCXCCliente) selectFiltroCXCCliente.value = ''; if(selectFiltroCXCEstado) selectFiltroCXCEstado.value = ''; if(inputFiltroCXCFacturaId) inputFiltroCXCFacturaId.value = ''; cargarYRenderizarCXC(); }); if(cuerpoTablaCXC) { cuerpoTablaCXC.addEventListener('click', (e) => { const pagarBtn = e.target.closest('.btn-registrar-pago-cxc'); const historialBtn = e.target.closest('.btn-ver-historial-pagos'); if (pagarBtn && !pagarBtn.disabled) { const facturaId = pagarBtn.dataset.facturaId; const clienteId = pagarBtn.dataset.clienteId; const clienteNombre = pagarBtn.dataset.clienteNombre; const saldoActual = parseFloat(pagarBtn.dataset.saldoActual); abrirModalPago(facturaId, clienteId, clienteNombre, saldoActual); } else if (historialBtn) { const facturaId = historialBtn.dataset.facturaId; const clienteNombre = historialBtn.dataset.clienteNombre; const totalFactura = parseFloat(historialBtn.dataset.totalFactura); const saldoPendiente = parseFloat(historialBtn.dataset.saldoPendiente); abrirModalHistorialPagos(facturaId, clienteNombre, totalFactura, saldoPendiente); } }); } if(btnConfirmarPago) btnConfirmarPago.addEventListener('click', confirmarRegistroPago);
+            
+            if(filtroInventarioTexto) filtroInventarioTexto.addEventListener('input', aplicarFiltrosInventario);
+            if(filtroInventarioStock) filtroInventarioStock.addEventListener('change', aplicarFiltrosInventario);
+            if(filtroInventarioESFechaInicio) filtroInventarioESFechaInicio.addEventListener('change', aplicarFiltrosInventario); 
+            if(filtroInventarioESFechaFin) filtroInventarioESFechaFin.addEventListener('change', aplicarFiltrosInventario);       
+            if(limpiarFiltroInventarioBtn) limpiarFiltroInventarioBtn.addEventListener('click', () => { if(filtroInventarioTexto) filtroInventarioTexto.value = ''; if(filtroInventarioStock) filtroInventarioStock.value = ''; if(filtroInventarioESFechaInicio) filtroInventarioESFechaInicio.value = ''; if(filtroInventarioESFechaFin) filtroInventarioESFechaFin.value = ''; aplicarFiltrosInventario(); });
+            if(inventarioLimitSelect) inventarioLimitSelect.addEventListener('change', (e) => { inventarioLimit = parseInt(e.target.value, 10); inventarioCurrentPage = 1; cargarYRenderizarInventario(); });
+            if(inventarioBtnPrimera) inventarioBtnPrimera.addEventListener('click', () => { if (inventarioCurrentPage > 1) { inventarioCurrentPage = 1; cargarYRenderizarInventario(); }});
+            if(inventarioBtnAnterior) inventarioBtnAnterior.addEventListener('click', () => { if (inventarioCurrentPage > 1) { inventarioCurrentPage--; cargarYRenderizarInventario(); }});
+            if(inventarioBtnSiguiente) inventarioBtnSiguiente.addEventListener('click', () => { if (inventarioCurrentPage < inventarioTotalPages) { inventarioCurrentPage++; cargarYRenderizarInventario(); }});
+            if(inventarioBtnUltima) inventarioBtnUltima.addEventListener('click', () => { if (inventarioCurrentPage < inventarioTotalPages) { inventarioCurrentPage = inventarioTotalPages; cargarYRenderizarInventario(); }});
+
+            if(filtroHistorialTexto) filtroHistorialTexto.addEventListener('input', aplicarFiltrosHistorialMov);
+            if(filtroHistorialTipo) filtroHistorialTipo.addEventListener('change', aplicarFiltrosHistorialMov);
+            if(filtroHistorialFechaInicio) filtroHistorialFechaInicio.addEventListener('change', aplicarFiltrosHistorialMov);
+            if(filtroHistorialFechaFin) filtroHistorialFechaFin.addEventListener('change', aplicarFiltrosHistorialMov);
+            if(limpiarFiltroHistorialBtn) limpiarFiltroHistorialBtn.addEventListener('click', () => { if(filtroHistorialTexto) filtroHistorialTexto.value = ''; if(filtroHistorialTipo) filtroHistorialTipo.value = ''; if(filtroHistorialFechaInicio) filtroHistorialFechaInicio.value = ''; if(filtroHistorialFechaFin) filtroHistorialFechaFin.value = ''; aplicarFiltrosHistorialMov(); });
+            if(historialLimitSelect) historialLimitSelect.addEventListener('change', (e) => { historialMovimientosLimit = parseInt(e.target.value, 10); historialMovimientosCurrentPage = 1; cargarYRenderizarHistorialMovimientos(); });
+            if(historialBtnPrimera) historialBtnPrimera.addEventListener('click', () => { if (historialMovimientosCurrentPage > 1) { historialMovimientosCurrentPage = 1; cargarYRenderizarHistorialMovimientos(); }});
+            if(historialBtnAnterior) historialBtnAnterior.addEventListener('click', () => { if (historialMovimientosCurrentPage > 1) { historialMovimientosCurrentPage--; cargarYRenderizarHistorialMovimientos(); }});
+            if(historialBtnSiguiente) historialBtnSiguiente.addEventListener('click', () => { if (historialMovimientosCurrentPage < historialMovimientosTotalPages) { historialMovimientosCurrentPage++; cargarYRenderizarHistorialMovimientos(); }});
+            if(historialBtnUltima) historialBtnUltima.addEventListener('click', () => { if (historialMovimientosCurrentPage < historialMovimientosTotalPages) { historialMovimientosCurrentPage = historialMovimientosTotalPages; cargarYRenderizarHistorialMovimientos(); }});
+
+            if(filtroFacturasTexto) filtroFacturasTexto.addEventListener('input', aplicarFiltrosHistorialFact);
+            if(filtroFacturasFechaInicio) filtroFacturasFechaInicio.addEventListener('change', aplicarFiltrosHistorialFact);
+            if(filtroFacturasFechaFin) filtroFacturasFechaFin.addEventListener('change', aplicarFiltrosHistorialFact);
+            if(filtroFacturasVerAnuladas) filtroFacturasVerAnuladas.addEventListener('change', aplicarFiltrosHistorialFact);
+            if(limpiarFiltroFacturasBtn) limpiarFiltroFacturasBtn.addEventListener('click', () => { if(filtroFacturasTexto) filtroFacturasTexto.value = ''; if(filtroFacturasFechaInicio) filtroFacturasFechaInicio.value = ''; if(filtroFacturasFechaFin) filtroFacturasFechaFin.value = ''; if(filtroFacturasVerAnuladas) filtroFacturasVerAnuladas.checked = false; aplicarFiltrosHistorialFact(); });
+            if(histfactLimitSelect) histfactLimitSelect.addEventListener('change', (e) => { histFacturasLimit = parseInt(e.target.value, 10); histFacturasCurrentPage = 1; cargarYRenderizarHistorialFacturas(); });
+            if(histfactBtnPrimera) histfactBtnPrimera.addEventListener('click', () => { if (histFacturasCurrentPage > 1) { histFacturasCurrentPage = 1; cargarYRenderizarHistorialFacturas(); }});
+            if(histfactBtnAnterior) histfactBtnAnterior.addEventListener('click', () => { if (histFacturasCurrentPage > 1) { histFacturasCurrentPage--; cargarYRenderizarHistorialFacturas(); }});
+            if(histfactBtnSiguiente) histfactBtnSiguiente.addEventListener('click', () => { if (histFacturasCurrentPage < histFacturasTotalPages) { histFacturasCurrentPage++; cargarYRenderizarHistorialFacturas(); }});
+            if(histfactBtnUltima) histfactBtnUltima.addEventListener('click', () => { if (histFacturasCurrentPage < histFacturasTotalPages) { histFacturasCurrentPage = histFacturasTotalPages; cargarYRenderizarHistorialFacturas(); }});
+            
+            const storedRole = sessionStorage.getItem('currentUserRole'); if (storedRole && appContainer && loginContainer) { appContainer.style.display = 'block'; loginContainer.style.display = 'none'; inicializarAplicacion(storedRole, true); } else { if (appContainer) appContainer.style.display = 'none'; if (loginContainer) loginContainer.style.display = 'block'; }
+            actualizarCamposMovimiento();
+        });
+        // --- FIN DEL BLOQUE JAVASCRIPT ---
+    </script>
+</body>
+</html>
